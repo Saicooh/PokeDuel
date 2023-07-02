@@ -194,7 +194,7 @@ int main()
         break;
 
       case 3 :
-        //administrarObjetos(Objetos,entrenadores);
+        administrarObjetos(Objetos,entrenadores);
         break;
 
       case 4 :

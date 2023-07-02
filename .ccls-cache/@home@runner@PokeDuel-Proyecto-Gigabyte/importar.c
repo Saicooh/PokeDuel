@@ -52,3 +52,37 @@ void cargarPokedex(HashMap *Pokedex, HashMap *Movimientos)
   }
   fclose(fp);
 }
+void cargarObjetos(HashMap *Objetos)
+{
+  FILE *fp = fopen("pokemon_objetos.csv", "r");
+
+  char linea[1024];
+  int i;
+  char *cont;
+  
+  fgets(linea, 1023, fp);
+
+  // Mover la inicialización del contador aquí
+  int contador = 1;
+  
+  while(fgets(linea, 1023, fp) != NULL)
+  {
+    Objeto *objetoAux = malloc(sizeof(Objeto));
+    for(i = 0; i < 6; i++)
+    {
+      char *aux = gets_csv_field(linea, i);
+      
+      switch(i)
+      {
+        case 0 : strcpy(objetoAux -> nombre, aux); break;
+        case 1 : objetoAux->curacion = atoi(aux); break;
+        case 2 : objetoAux->pp = atoi(aux); break;
+        case 3 : objetoAux -> revive =  atoi(aux); break;
+        case 4 : objetoAux->todos =  atoi(aux); break;
+        case 5 : cont = strdup(aux); break;
+      }
+    }
+    insertMap(Objetos,cont,objetoAux);
+  }
+  fclose(fp);
+}

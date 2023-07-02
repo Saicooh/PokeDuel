@@ -5,4 +5,6 @@
 
 void cargarPokedex(HashMap *Pokedex, HashMap *Movimientos);
 
+void cargarObjetos(HashMap *Objetos);
+
 #endif /* importar_h */
