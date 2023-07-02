@@ -10,11 +10,13 @@
 #include <time.h>
 #include <unistd.h>
 #include "structs.h"
-#include "funciones.h"
-#include "importar.h"
+#include "combate.h"
 #include "list.h"
 #include "hashmap.h"
+#include "funciones.h"
+#include "importar.h"
 
+#define MAX 25
 
 void mostrarPokedex(HashMap *Pokedex);
 

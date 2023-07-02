@@ -1,4 +1,4 @@
-#include "main.h"
+  #include "main.h"
 
 int calculoDano(HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores, Pokemon *PokeAtaca, Pokemon *PokeRecibe, Ataque ataque)
 {
@@ -419,3 +419,85 @@ int dificultadDificil(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movi
   
   return danio;
 }
+void mostrarCreditos()
+{
+  char *creditos[] =
+  {
+        "\033[0;36m-------------------------------------------------------\n",
+        "\033[0;35m                       CREDITOS\n",
+        "\033[0;36m-------------------------------------------------------\n\n",
+        "\033[0;34m\n",
+        "\033[1;37m                       Proyecto:\n\n",
+        "\033[0;34m                      \"PokeDuel\"\n",
+        "\033[1;37m\n",
+        "\033[0;34m                      Creado por:\n\n",
+        "\033[1;37m                     Team Gigabyte\n\n",
+        "\n",
+        "                  Miembros del equipo:\n\n",
+        "      Jose Lara Arce   ->  Jugando Replit hace 13hrs...\n\n",
+        "      Claudio Toledo   ->  \"BOOM\" \n\n",
+        "       Fabian Solis    ->  \"Ya, esta listo... (core dumped)\"\n\n"
+        "      Matias Villegas  ->  \"Pero ChatGPT me dijo que...\"\n\n",
+        "\n",
+        "\033[1;37m               Agradecimientos especiales:\n\n",
+        "                        ChatGPT 4\n\n",
+        "                         YOU.com\n\n",
+        "\033[0;36m     Este juego no hubiera sido posible sin su ayuda.\n\n",
+        "\n",
+        "\033[0;36m-------------------------------------------------------\n",
+        "\033[0;35m  Team Gigabyte © 2023. Todos los derechos reservados.\n",
+        "\033[0;36m-------------------------------------------------------\n\n",
+    };
+
+    
+    int num_lineas = sizeof(creditos) / sizeof(creditos[0]);
+  
+    for (int i = 0; i < num_lineas; i++) 
+    {
+      printf("%s", creditos[i]);
+      sleep(1);
+      fflush(stdout);
+    }
+  
+    printf("\033[0m");
+}
+
+void salonDeLaFama(Entrenador entrenadores[])
+{
+  system("clear");
+  system("cls");
+  puts("+---------------------------------------+");
+  printf("|       FELICIDADES   %-9s!!!      |\n", entrenadores[0].nombre);
+  puts("+---------------------------------------+\n");
+
+  puts("+---------------------------------------+");
+  puts("|                                       |");
+  puts("|    BIENVENIDO AL SALON DE LA FAMA     |");
+  puts("|                                       |");
+  puts("+---------------------------------------+\n");
+  
+  sleep(3);
+
+  for(int i = 0; i < entrenadores[0].sizeTeam ; i++)
+  {
+    puts("+---------------------------------------+");
+    puts("|                                       |");
+    printf("|    %30s     |\n",entrenadores[0].equipo[i].nombre);
+    puts("|       LVL. 100                        |");
+    printf("|    TIPO 1 %-23s     |\n",entrenadores[0].equipo[i].tipo1);
+    if(strcmp(entrenadores[0].equipo[i].tipo2, "0") == 0)
+    {
+      puts("|                                       |");
+    }else
+      printf("|    TIPO 2 %-23s     |\n",entrenadores[0].equipo[i].tipo2);
+    puts("+---------------------------------------+\n");
+    sleep(2);
+  }
+
+  escribirLentamente("MUCHAS GRACIAS POR JUGAR NUESTRO VIDEOJUEGO!!!",2);
+  sleep(5);
+  printf("\033[2J\033[H");
+  
+  mostrarCreditos();
+}
+
