@@ -232,21 +232,37 @@ void agregarObjeto(HashMap *Objetos ,Entrenador entrenadores[])
   int cantidad; 
 
   mostrarObjetos(Objetos);
-  
+
+  //Se pide el usuario Ingresar el Objeto añadir y su cantidad correspondiente
   puts("\nIngrese el objeto a anadir:\n");
   scanf("%d", &indice);
+
+  //Se realiza una verificacion de que el item sea valido.
+
+  if(indice <= 0 || indice >13)
+  {
+    printf("\nIngrese un Item Valido\n");
+    return agregarObjeto(Objetos,entrenadores);
+  }
+  
+  
   puts("\nIngrese la cantidad que quiere agregar (Max 99):");
   scanf("%d", &cantidad);
 
-  sprintf(item,"%i",indice);
 
+
+  sprintf(item,"%i",indice);
+  
+  
+  // Aca realizamos Una verificacion sobre que la cantidad sea una cantidad valida
   while (cantidad < 0 || cantidad > 99)
   {
     puts("\nIngrese una cantidad valida (entre 0 y 99):");
     scanf("%d", &cantidad);
   }
-  
-  entrenadores[0].mochila = realloc(entrenadores[0].mochila, (entrenadores[0].cantidadObj + 1) * sizeof(Objeto));
+
+  //Aca pasamos todos los datos del Item del mapa de Objetos a la mochila del usuario.
+  entrenadores[0].mochila = realloc(entrenadores[0].mochila, (entrenadores[0].cantidadObj + 1) *   sizeof(Objeto));
 
   Pair *objetoPair = searchMap(Objetos,item);
 
@@ -262,13 +278,12 @@ void agregarObjeto(HashMap *Objetos ,Entrenador entrenadores[])
   entrenadores[0].cantidadObj++;
 }
 
-
 void administrarObjetos(HashMap *Objetos, Entrenador entrenadores[])
 {
   printf("\033[2J\033[H");
   
   int opcion;
-
+ // se le pide al usuario ingresar una opcion del menu
   while (1)
   {
     puts("\nQue deseas realizar?\n");
@@ -285,6 +300,7 @@ void administrarObjetos(HashMap *Objetos, Entrenador entrenadores[])
     scanf("%d", &opcion);
     getchar();
 
+    // dependiendo de la opcion que le alla seleccionado el usuario lo llevara a una de las cuatro funciones.
     switch (opcion)
     {
       case 1 : mostrarObjetos(Objetos); break;

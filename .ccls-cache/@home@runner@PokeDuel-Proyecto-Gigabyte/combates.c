@@ -48,3 +48,28 @@ void reiniciar(Entrenador entrenadores[])
     }
   }
 }
+
+int dificultadNormal(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores)
+{
+  char cadenaCompleta[50];
+
+  srand(time(NULL));
+  
+  int danio;
+
+  Ataque *ataq = firstList(entrenadores[1].equipo[0].habilidades);
+
+  int randAttack = rand() % 4 + 1;
+
+  for(int i = 1 ; i != randAttack ; i++) ataq = nextList(entrenadores[1].equipo[0].habilidades);
+  
+  printf("%s enemigo uso %s\n\n", entrenadores[1].equipo[0].nombre, ataq->nombre);
+  sprintf(cadenaCompleta, "%s enemigo uso %s", entrenadores[1].equipo[0].nombre, ataq->nombre);
+  escribirLentamente(cadenaCompleta, 2);
+  sleep(2);
+
+  danio = calculoDano(Pokedex, Movimientos, Multiplicadores, &entrenadores[1].equipo[0], &entrenadores[0].equipo[0], *ataq);
+
+  return danio;
+}
+
