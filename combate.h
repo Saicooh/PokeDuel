@@ -16,4 +16,10 @@ int dificultadDificil(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movi
 
 void salonDeLaFama(Entrenador entrenadores[]);
 
+void eliminarObjPelea(Entrenador entrenador[],int item);
+
+void efectos(int posicion, Entrenador entrenadores[], int item);
+
+void usarObjeto(Entrenador entrenadores[]);
+
 #endif /* COMBATE_H */

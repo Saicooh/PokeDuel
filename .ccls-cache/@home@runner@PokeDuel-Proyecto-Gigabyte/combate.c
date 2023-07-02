@@ -420,6 +420,123 @@ int dificultadDificil(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movi
   return danio;
 }
 
+void eliminarObjPelea(Entrenador entrenador[],int item)
+{
+  char *aux = malloc(MAX * sizeof(char));
+  strcpy(aux, entrenador[0].mochila[item].nombre);
+  
+  for (int i = item; i < entrenador[0].cantidadObj - 1; i++) 
+  {
+     entrenador[0].mochila[i] = entrenador[0].mochila[i + 1];
+  }
+  free(aux);
+  entrenador[0].cantidadObj--;
+  return;
+   
+}
+
+void efectos(int posicion, Entrenador entrenador[],int item)
+{
+  Ataque *ataque = firstList(entrenador[0].equipo->habilidades);
+
+  if(entrenador[0].mochila[item].curacion > 0)
+  {
+    entrenador[0].equipo[posicion].saludActual += entrenador[0].mochila[item].curacion;
+    
+    if(entrenador[0].equipo[posicion].saludActual > entrenador[0].equipo[posicion].salud) entrenador[0].equipo[posicion].saludActual = entrenador[0].equipo[posicion].salud;
+
+    entrenador[0].mochila[item].cantidad--;
+    if(entrenador[0].mochila[item].cantidad == 0) eliminarObjPelea(entrenador,item);
+  }
+
+  
+  if(entrenador[0].mochila[item].pp > 0)
+  {  
+    if (entrenador[0].mochila[item].todos == true)
+    {
+      while(ataque !=NULL)
+      {
+        ataque->numUsosActual += entrenador[0].mochila[item].pp;
+        if(ataque->numUsosActual > ataque->numUsosMAX) ataque->numUsosActual = ataque->numUsosMAX;
+        
+        ataque = nextList(entrenador[0].equipo->habilidades);
+      }
+      entrenador[0].mochila[item].cantidad--;
+      if(entrenador[0].mochila[item].cantidad == 0) eliminarObjPelea(entrenador,item);
+    }
+    else
+    {
+      int opcionAtaque;
+      
+      escribirLentamente("Ingrese el ataque que desea aumentar PP", 1);
+
+      for(int i = 0 ; i < 4 ; i++)
+      {
+        printf("%d. %s ", i + 1, ataque -> nombre);
+        printf("[%d/%d] pp\n", ataque -> numUsosActual, ataque -> numUsosMAX);
+        ataque = nextList(entrenador[0].equipo[posicion].habilidades);
+      }
+      puts("");
+      scanf("%d",&opcionAtaque);
+
+      ataque = firstList(entrenador[0].equipo->habilidades);
+      
+      for(int i = 0 ; i != opcionAtaque-1 ; i++) ataque = nextList(entrenador[0].equipo[posicion].habilidades);
+      printf("\n%s\n",ataque->nombre);
+      ataque->numUsosActual += entrenador[0].mochila[item].pp;
+      entrenador[0].mochila[item].cantidad--;
+      if(entrenador[0].mochila[item].cantidad == 0) eliminarObjPelea(entrenador,item);
+      
+      if(ataque->numUsosActual > ataque->numUsosMAX) ataque->numUsosActual = ataque->numUsosMAX; 
+    }
+  }
+
+  
+  if(entrenador[0].mochila[item].revive > 0)
+  {
+    entrenador[0].equipo[posicion].muerto = false;
+    entrenador[0].cantidadVivos++;    
+    
+    if(entrenador[0].mochila[item].revive == 1)
+    {
+      entrenador[0].equipo[posicion].saludActual += entrenador[0].equipo[posicion].salud/2;
+      entrenador[0].mochila[item].cantidad--;
+      if(entrenador[0].mochila[item].cantidad == 0) eliminarObjPelea(entrenador,item);
+    }
+      
+    if(entrenador[0].mochila[item].revive == 2)
+    {
+      entrenador[0].equipo[posicion].saludActual = entrenador[0].equipo[posicion].salud;
+      entrenador[0].mochila[item].cantidad--;
+      if(entrenador[0].mochila[item].cantidad == 0) eliminarObjPelea(entrenador,item);
+    }
+  }
+}
+
+void usarObjeto(Entrenador entrenadores[])
+{ 
+  if(entrenadores[0].cantidadObj == 0)
+  {
+    printf("No hay objetos en la mochila");
+    return;
+  }
+  
+  int item;
+  int posicion;
+  bool verificacion = true;
+
+  mostrarMochila(entrenadores);
+  printf("\nIngrese el objeto que quiere usar:\n");
+  
+  scanf("%i",&item);
+  item--;
+  verEquipoActual(entrenadores);
+  printf("\nIngrese la posicion que se encuentra el Pokemon para aplicar el efecto\n");
+  scanf("%d",&posicion); 
+  posicion--;
+  efectos(posicion, entrenadores, item);
+}
+
 void mostrarCreditos()
 {
   char *creditos[] =
