@@ -1,5 +1,6 @@
 #include "main.h"
 //#include <windows.h>
+
 void mostrarPokedex(HashMap *Pokedex)
 {
   Pair *aux = firstMap(Pokedex);
@@ -88,7 +89,6 @@ void agregarPokemon(Entrenador entrenadores[], int *equipoRegistrado, HashMap *P
   
   *equipoRegistrado = 1;
 }
-
 
 void administrarOrden(Entrenador entrenadores[])
 {
