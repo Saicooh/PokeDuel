@@ -297,6 +297,244 @@ void administrarObjetos(HashMap *Objetos, Entrenador entrenadores[])
   }
 }
 
+void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores,int entrenadorPos, int *ganador)
+{
+  char cadenaCompleta[1000];
+  
+  srand(time(NULL));
+  
+  int danio;
+
+  if(entrenadorPos == 1)
+  {
+    printf("\033[2J\033[H");
+  }
+  
+  char auxNombre[MAX];
+  int dificultad;
+
+  *ganador = 1;
+
+  if(entrenadorPos == 1)
+  {
+    //playSongType(8,0,0);
+    puts("");
+    escribirLentamente("BIENVENIDO AL MODO ENTRENAMIENTO!!", 2);
+    sleep(2);
+    escribirLentamente("La entrenadora Jesicca sera tu enemigo!", 2);
+    sleep(2);
+    escribirLentamente("Escoge la dificultad del entrenamiento (1 = normal y 2 = dificil)", 2);
+    
+    while(1)
+    {
+      scanf("%d", &dificultad);
+      if(dificultad == 1 || dificultad == 2) break;
+      else printf("Escoja una dificultad correspondiente (1 o 2)");
+    }
+    
+    escribirLentamente("Este sera el equipo de Jessica contra el que te enfrentaras:", 2);
+    mostrarEquipoEnemigo(entrenadores, Pokedex);
+  }
+  else dificultad = 2;
+  
+  char pokeNum[MAX];
+  int numPokedex;
+  int size;
+  int vivo = 1;
+
+ if(entrenadorPos == 1) 
+  {
+    //playSongType(2,1,0);
+    printf("\033[2J\033[H");
+  }
+  puts("");
+  escribirLentamente("La batalla comienza ahora!!",3);
+  sleep(1);
+  printf("%s envio a %s\n\n",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
+  sleep(1);
+  printf("Ve! %s!\n\n", entrenadores[0].equipo[0].nombre);
+  sleep(1);
+  
+  bool first = true;
+  
+  while(true)
+  {
+    if(entrenadores[0].equipo[0].muerto == true || entrenadores[entrenadorPos].equipo[0].muerto == true) break;
+
+    info(entrenadores, first, danio, entrenadorPos);
+    
+    int opcionMenuBatalla;
+    
+    scanf("%d", &opcionMenuBatalla);
+    puts("");
+
+    if(entrenadorPos == 1)
+    {
+      switch(opcionMenuBatalla)
+      {
+        case 1 : atacar(entrenadores, Pokedex, Movimientos, Multiplicadores, &danio, entrenadorPos, &vivo, ganador); break;
+  
+        case 2 :
+          entrenadores[0].equipo[0].ataque = entrenadores[0].equipo[0].ataqueBase;
+          entrenadores[0].equipo[0].defensa = entrenadores[0].equipo[0].defensaBase;
+          cambiarPBatalla(entrenadores); break;
+        
+        case 3 : usarObjeto(entrenadores); break;
+        
+        case 4 :
+          entrenadores[0].equipo[0].ataque = entrenadores[0].equipo[0].ataqueBase;
+          entrenadores[0].equipo[0].defensa = entrenadores[0].equipo[0].defensaBase;
+          escribirLentamente("Has huido de la batalla ...", 2); 
+          sleep(2);
+          reiniciar(entrenadores);
+          //playSongType(1,1,0);
+          return;
+      }
+    }
+    else
+    {
+      while(opcionMenuBatalla == 4)
+      {
+        escribirLentamente("No puedes huir.",2);
+        info(entrenadores, first, danio, entrenadorPos);
+        scanf("%d", &opcionMenuBatalla);
+        puts("");
+      }
+      
+      switch(opcionMenuBatalla)
+      {
+        case 1 : atacar(entrenadores, Pokedex, Movimientos, Multiplicadores, &danio, entrenadorPos, &vivo, ganador); break;
+  
+        case 2 : 
+          entrenadores[0].equipo[0].ataque = entrenadores[0].equipo[0].ataqueBase;
+          entrenadores[0].equipo[0].defensa = entrenadores[0].equipo[0].ataqueBase;
+          cambiarPBatalla(entrenadores); break;
+        
+        case 3 : usarObjeto(entrenadores); break;
+      }
+    }
+    
+    first = false;
+
+    danio = 0;
+    
+    if(vivo == 1)
+    {
+      switch(dificultad)
+      {
+        case 1 : danio = dificultadNormal(entrenadores, Pokedex, Movimientos, Multiplicadores); break;
+        
+        case 2 : danio = dificultadDificil(entrenadores, Pokedex, Movimientos, Multiplicadores, entrenadorPos); break;
+      }
+    }
+
+    if(entrenadores[entrenadorPos].equipo[0].saludActual <= 0)
+    { 
+      if(entrenadores[entrenadorPos].equipo[5].muerto == false) 
+      {
+          sprintf(cadenaCompleta,"%s se desmayo!", entrenadores[entrenadorPos].equipo[0].nombre);
+          escribirLentamente(cadenaCompleta, 2);
+      }
+      
+      entrenadores[entrenadorPos].equipo[0].saludActual = 0;
+      vivo = 0;
+  
+      entrenadores[entrenadorPos].equipo[0].muerto = true;
+  
+      for(int i = 1 ; i < 6 ; i++)
+      {
+        if(entrenadores[entrenadorPos].equipo[5].muerto == true) break;
+        else
+        {
+          if(entrenadores[entrenadorPos].equipo[i].muerto == false)
+          {
+            Pokemon aux = entrenadores[entrenadorPos].equipo[0];
+            entrenadores[entrenadorPos].equipo[0] = entrenadores[entrenadorPos].equipo[i];
+            entrenadores[entrenadorPos].equipo[i] = aux;
+  
+            char cambiarPokemon[MAX];
+      
+            printf("%s va a utilizar a %s ...\n\n",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
+            printf("%s, quieres cambiar de Pokemon? (s/n)\n", entrenadores[0].nombre);
+  
+            scanf("%s", cambiarPokemon);
+            getchar();
+            
+            if(strcmp(cambiarPokemon, "s") == 0)
+            {
+              strcpy(auxNombre, entrenadores[0].equipo[0].nombre);
+              entrenadores[0].equipo[0].ataque = entrenadores[0].equipo[0].ataqueBase;
+              entrenadores[0].equipo[0].defensa = entrenadores[0].equipo[0].defensaBase;
+              cambiarPBatalla(entrenadores);
+              printf("%s vuelve\n\n", auxNombre);
+              printf("Ve %s!\n", entrenadores[0].equipo[0].nombre);
+            }
+  
+            printf("\n%s envio a %s!\n\n",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
+            
+            break;
+          }
+        }
+      }
+    }
+    
+    entrenadores[0].equipo[0].saludActual -= danio;
+    
+    if(vivo == 0) vivo = 1;
+    
+    if(entrenadores[0].equipo[0].saludActual <= 0)
+    {
+      entrenadores[0].cantidadVivos--;
+      
+      sprintf(cadenaCompleta,"%s se desmayo!", entrenadores[0].equipo[0].nombre);
+      escribirLentamente(cadenaCompleta, 2);
+      sleep(3);
+      
+      entrenadores[0].equipo[0].saludActual = 0;
+  
+      entrenadores[0].equipo[0].muerto = true;
+      
+      if(entrenadores[0].cantidadVivos < 1)
+      {
+        *ganador = 0;
+        break;
+      }
+      entrenadores[0].equipo[0].ataque = entrenadores[0].equipo[0].ataqueBase;
+      entrenadores[0].equipo[0].defensa = entrenadores[0].equipo[0].defensaBase;
+      cambiarPBatalla(entrenadores);
+    }
+  }
+
+  if(entrenadorPos == 1)
+  {
+    reiniciar(entrenadores);
+    
+    if(*ganador == 1)
+    {
+      //playSongType(5,0,0,0);
+      escribirLentamente("Felicidades has derrotado a la Entrenadora Jessica!!", 2);
+      sleep(4);
+      system("clear");
+      //playSongType(1,1,0,0);
+      return;
+    }
+    else
+    {
+      sleep(1);
+      
+      sprintf(cadenaCompleta, "%s se ha quedado sin Pokemon disponibles!", entrenadores[entrenadorPos].nombre);
+      escribirLentamente(cadenaCompleta, 2);
+
+      sleep(2);
+      escribirLentamente("Has perdido ...", 1);
+
+      sleep(2);
+      //playSongType(1,1,0,0);
+      return;
+    }
+  }
+}
+
 int main()
 {
 /*
@@ -337,12 +575,13 @@ int main()
   HashMap *Movimientos = createMap(105);
   HashMap *Objetos = createMap(15);
   HashMap *Multiplicadores = createMap(225);
-
+  
+  cargarMultiplicadores(Multiplicadores);
   cargarMovimientos(Movimientos);
   cargarPokedex(Pokedex, Movimientos);
   cargarObjetos(Objetos);
   cargarEntrenadoresLiga(entrenadores, Pokedex);
-  cargarMultiplicadores(Multiplicadores);
+  
   
   
   while(user_continue)

@@ -34,5 +34,8 @@ void mostrarMochila(Entrenador entrenadores[]);
 void eliminarObjeto(Entrenador entrenadores[]);
 //
 
+//
+void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores,int entrenadorPos, int *ganador);
+
 #define MAX 25
 #endif /* main_h */
