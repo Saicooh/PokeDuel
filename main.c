@@ -362,8 +362,6 @@ void agregarObjeto(HashMap *Objetos ,Entrenador entrenadores[])
   puts("\nIngrese la cantidad que quiere agregar (Max 99):");
   scanf("%d", &cantidad);
 
-
-
   sprintf(item,"%i",indice);
   
   
@@ -429,7 +427,6 @@ void administrarObjetos(HashMap *Objetos, Entrenador entrenadores[])
 void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores,int entrenadorPos, int *ganador)
 {
   char cadenaCompleta[1000];
-  
   srand(time(NULL));
   
   int danio;
@@ -825,6 +822,7 @@ int main()
   cargarPokedex(Pokedex, Movimientos);
   cargarObjetos(Objetos);
   cargarEntrenadoresLiga(entrenadores, Pokedex);
+  strcpy(entrenadores[1].nombre, "Jessica");
   
   int ganador;
 
