@@ -195,6 +195,31 @@ void reiniciar(Entrenador entrenadores[])
   }
 }
 
+void cambiarPBatalla(Entrenador entrenadores[])
+{
+  Pokemon auxCambio;
+  int opcionCambio;
+  
+  printf("¿Que pokemon quieres utilizar?\n\n");
+
+  for(int i = 0 ; i != entrenadores[0].sizeTeam ; i++)
+  {
+    if(entrenadores[0].equipo[i].muerto != true) printf("%d. %s [%d/%d]\n", i+1, entrenadores[0].equipo[i].nombre, entrenadores[0].equipo[i].saludActual, entrenadores[0].equipo[i].salud);
+    else printf("%d. %s [DEBILITADO]\n", i+1, entrenadores[0].equipo[i].nombre);
+  }
+  puts("");
+  scanf("%d", &opcionCambio);
+
+  // validar num entre 1 y 6 y que no elija un pokemon muerto
+  
+  auxCambio = entrenadores[0].equipo[0];
+  entrenadores[0].equipo[0] = entrenadores[0].equipo[opcionCambio - 1];
+  entrenadores[0].equipo[opcionCambio - 1] = auxCambio;
+
+  printf("\nVuelve %s\n", auxCambio.nombre);
+  printf("\nVe %s!\n\n", entrenadores[0].equipo[0].nombre);
+}
+
 void atacar(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores, int *danio, int posicion, int *vivo, int *ganador)
 {
   char cadenaCompleta[1000];
@@ -324,6 +349,96 @@ void atacar(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, H
     }
   }
 }
+
+void info(Entrenador entrenadores[], bool first, int danio, int posicion)
+{
+  char cadenaCompleta[50];
+  sprintf(cadenaCompleta, "Tu Pokemon: %s ", entrenadores[0].equipo[0].nombre);
+  escribirLentamente(cadenaCompleta, 0);
+  sprintf(cadenaCompleta, "(%i/%i) PS - LVL. 100\n\n", entrenadores[0].equipo[0].saludActual, entrenadores[0].equipo[0].salud);
+  escribirLentamente(cadenaCompleta, 0);
+  //printf("Tu Pokemon: %s ", entrenadores[0].equipo[0].nombre);
+  //printf("(%i/%i) PS - LVL. 100\n\n", entrenadores[0].equipo[0].saludActual, entrenadores[0].equipo[0].salud);
+
+  if (first)
+  {
+    sprintf(cadenaCompleta, "Pokemon Enemigo: %s ", entrenadores[posicion].equipo[0].nombre);
+    escribirLentamente(cadenaCompleta, 0);
+    //printf("Pokemon Enemigo: %s ", entrenadores[posicion].equipo[0].nombre);
+    sprintf(cadenaCompleta, "(%i/%i) PS - LVL. 100\n\n", entrenadores[posicion].equipo[0].saludActual, entrenadores[posicion].equipo[0].salud);
+    escribirLentamente(cadenaCompleta, 0);
+    //printf("(%i/%i) PS - LVL. 100\n\n", entrenadores[posicion].equipo[0].saludActual, entrenadores[posicion].equipo[0].salud);
+  }
+  else
+  {
+    if(danio > 0) contadorBajando(entrenadores, entrenadores[posicion].equipo[0].saludActual,danio, posicion);
+    else
+    {
+      printf("Pokemon Enemigo: %s ", entrenadores[posicion].equipo[0].nombre);
+      printf("(%i/%i) PS - LVL. 100\n\n", entrenadores[posicion].equipo[0].saludActual, entrenadores[posicion].equipo[0].salud);
+    }
+  }
+  
+  printf("Elija una opcion:\n\n");
+  
+  printf("1. Atacar\n");
+  printf("2. Cambiar Pokemon\n");
+  printf("3. Usar Objeto\n");
+  printf("4. Huir\n\n");
+}
+
+int compararEficiencia(const void *a, const void *b)
+{
+  const AtkEfc *atkEfcA = (const AtkEfc *)a;
+  const AtkEfc *atkEfcB = (const AtkEfc *)b;
+
+  if (atkEfcA->efc > atkEfcB->efc) return -1;
+  else if (atkEfcA->efc < atkEfcB -> efc) return 1;
+  else 
+  {
+    // Si la eficiencia es igual, ordenar por potencia en orden descendente
+    
+    if (atkEfcA->atk.potencia > atkEfcB->atk.potencia) return -1;
+    else if (atkEfcA->atk.potencia < atkEfcB->atk.potencia) return 1;
+    else return 0;
+  }
+}
+
+void contadorBajando(Entrenador entrenadores[], int vidaActual, int danio, int entrenadorPos)
+{
+  int decremento = 1;
+
+  int vidaEmpezar = entrenadores[entrenadorPos].equipo[0].saludActual + danio;
+
+  printf("Pokemon Enemigo: %s ", entrenadores[entrenadorPos].equipo[0].nombre);
+  printf("(");
+
+  for (int i = vidaEmpezar ; i >= entrenadores[entrenadorPos].equipo[0].saludActual; i--)
+  {
+    printf("%d", i);
+    fflush(stdout);
+
+    usleep(25000); // Agrega un retraso para generar el efecto deseado
+
+    int num_digits = 0; // Calcula el número de digitos del número actual
+    int temp = i;
+    while (temp != 0)
+    {
+      temp /= 10;
+      num_digits++;
+    }
+    // Borrar número anterior agregando espacios y caracteres de retroceso
+    int j;
+
+    for (j = 0; j < num_digits; j++) 
+    {
+      printf("\b \b");
+    }
+  }
+  
+  printf("%d/%d) PS - LVL. 100\n\n",entrenadores[entrenadorPos].equipo[0].saludActual, entrenadores[entrenadorPos].equipo[0].salud);
+}
+
 
 int dificultadNormal(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores)
 {
