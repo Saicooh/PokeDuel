@@ -1,4 +1,30 @@
 #include "main.h"
+//#include <windows.h>
+void mostrarPokedex(HashMap *Pokedex)
+{
+  Pair *aux = firstMap(Pokedex);
+  char numPokedex[4];
+  int n = 1;
+
+  printf("\x1b[32m%-4s | %-20s | %-15s | %-15s\x1b[0m\n", "#", "Nombre", "Tipo 1", "Tipo 2");
+  printf("----------------------------------------------------\n");
+
+  while(n != 152)
+  {
+    sprintf(numPokedex, "%i", n);
+    Pair *aux2 = searchMap(Pokedex, numPokedex);
+    Pokemon *pokemonAux = aux2 -> value;
+    
+    printf("%-4s | %-20s | %-15s | ", numPokedex, pokemonAux -> nombre, pokemonAux -> tipo1);
+    
+    if (strcmp(pokemonAux -> tipo2, "0") != 0) printf("%-15s\n", pokemonAux -> tipo2);
+    else printf("N/A\n");
+    
+    n++;
+  }
+  puts("");
+}
+
 int main()
 {
 /*
@@ -56,7 +82,7 @@ int main()
     else switch(opcion)
     {
       case 1 :
-        //mostrarPokedex(Pokedex);
+        mostrarPokedex(Pokedex);
         validar(&user_continue);
         break;
 
