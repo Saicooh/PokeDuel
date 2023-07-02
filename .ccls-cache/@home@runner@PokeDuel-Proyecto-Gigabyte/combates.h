@@ -2,7 +2,7 @@
 #define combates_h
 #include "structs.h"
 
-
+int calculoDano(HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores, Pokemon *PokeAtaca, Pokemon *PokeRecibe, Ataque ataque);
 
 void mostrarEquipoEnemigo(Entrenador entrenadores[], HashMap *Pokedex);
 
