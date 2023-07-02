@@ -148,6 +148,14 @@ int calculoDano(HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores
   return 0;
 }
 
+void cambiarPokemon(char *auxNombre, Entrenador entrenadores[])
+{
+  strcpy(auxNombre, entrenadores[0].equipo[0].nombre);
+  administrarOrden(entrenadores);
+  printf("%s vuelve\n\n", auxNombre);
+  printf("Ve %s!\n\n", entrenadores[0].equipo[0].nombre);
+}
+
 void mostrarEquipoEnemigo(Entrenador entrenadores[], HashMap *Pokedex)
 {
   for(int i = 0; i < 6; i++)
