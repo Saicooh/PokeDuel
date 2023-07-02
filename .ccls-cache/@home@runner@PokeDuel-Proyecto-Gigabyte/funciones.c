@@ -157,3 +157,114 @@ int calcularEspaciosExtra(int largoCadena, int ancho)
 {
   return (ancho - largoCadena) / 2;
 }
+
+/*void playSongType(int type, int loop, int numLiga) 
+{
+  PlaySound(NULL, 0, SND_ASYNC);
+
+  char *cancionesMenu[] =
+  {
+    "musiquita\\menu1.wav",
+    "musiquita\\menu2.wav",
+    "musiquita\\menu3.wav",
+    "musiquita\\menu4.wav",
+  }; // 1
+
+  char *cancionesBatalla[] =
+  {
+    "musiquita\\batalla1.wav",
+    "musiquita\\batalla2.wav",
+    "musiquita\\batalla3.wav",
+    "musiquita\\batalla4.wav",
+  }; // 2
+
+  char *cancionesAntesLiga[] =
+  {
+    "musiquita\\road.wav",
+  }; // 3
+
+  char *cancionesLiga[] =
+  {
+    "musiquita\\liga1.wav",
+    "musiquita\\liga2.wav",
+    "musiquita\\liga3.wav",
+    "musiquita\\liga4.wav",
+  }; // 4
+  
+  char *cancionesVictoriaNormal[] =
+  {
+    "musiquita\\victoria.wav",
+  }; // 5
+
+  char *cancionesVictoriaLiga[] =
+  {
+    "musiquita\\victoriaLiga.wav",
+  }; //6
+
+  char *cancionAntesCampeon[] =
+  {
+    "musiquita\\antescampeon1.wav",
+    "musiquita\\antescampeon2.wav",
+  }; // 7
+
+  char *cancionesAntesEntrenamiento[] =
+  {
+    "musiquita\\pre_entrenamiento.wav",
+  }; // 8
+
+  char *cancionesCampeon[] =
+  {
+    "musiquita\\araya.wav",
+  }; // 9
+  char **cancionesSeleccionadas;
+  int cantidadDeCanciones;
+  const char *cancionAleatoria;
+  switch (type) 
+  {
+    case 1:
+      cancionesSeleccionadas = cancionesMenu;
+      cantidadDeCanciones = sizeof(cancionesMenu) / sizeof(cancionesMenu[0]);
+      break;
+    case 2:
+      cancionesSeleccionadas = cancionesBatalla;
+      cantidadDeCanciones = sizeof(cancionesBatalla) / sizeof(cancionesBatalla[0]);
+      break;
+    case 3:
+      cancionesSeleccionadas = cancionesAntesLiga;
+      cantidadDeCanciones = sizeof(cancionesAntesLiga) / sizeof(cancionesAntesLiga[0]);
+      break;
+    case 4:
+      cancionesSeleccionadas = cancionesLiga;
+      cancionAleatoria = cancionesSeleccionadas[numLiga];
+      if (loop) PlaySound(TEXT(cancionAleatoria), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+      else PlaySound(TEXT(cancionAleatoria), NULL, SND_FILENAME | SND_ASYNC);
+      return;
+
+    case 5:
+      cancionesSeleccionadas = cancionesVictoriaNormal;
+      cantidadDeCanciones = sizeof(cancionesVictoriaNormal) / sizeof(cancionesVictoriaNormal[0]);
+      break;
+    case 6:
+      cancionesSeleccionadas = cancionesVictoriaLiga;
+      cantidadDeCanciones = sizeof(cancionesVictoriaLiga) / sizeof(cancionesVictoriaLiga[0]);
+      break;
+    case 7:
+      cancionesSeleccionadas = cancionAntesCampeon;
+      cantidadDeCanciones = sizeof(cancionAntesCampeon) / sizeof(cancionAntesCampeon[0]);
+      break;
+    case 8:
+      cancionesSeleccionadas = cancionesAntesEntrenamiento;
+      cantidadDeCanciones = sizeof(cancionesAntesEntrenamiento) / sizeof(cancionesAntesEntrenamiento[0]);
+      break;
+    case 9:
+      cancionesSeleccionadas = cancionesCampeon;
+      cantidadDeCanciones = sizeof(cancionesCampeon) / sizeof(cancionesCampeon[0]);
+      break;
+    }
+
+    int indiceAleatorio = rand() % cantidadDeCanciones;
+    cancionAleatoria = cancionesSeleccionadas[indiceAleatorio];
+    if (loop) PlaySound(TEXT(cancionAleatoria), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+    else PlaySound(TEXT(cancionAleatoria), NULL, SND_FILENAME | SND_ASYNC);
+}
+*/

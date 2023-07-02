@@ -28,6 +28,8 @@ void eliminarPokemon(Entrenador entrenadores[]);
 void administrarOrden(Entrenador entrenadores[]);
 void verEquipoActual(Entrenador entrenadores[]);
 //
+
+//
 void administrarObjetos(HashMap *Objetos, Entrenador entrenadores[]);
 
 void mostrarObjetos(HashMap *Objetos);
@@ -45,7 +47,7 @@ void info(Entrenador entrenadores[], bool first, int danio, int posicion);
 void cambiarPokemon(char *auxNombre, Entrenador entrenadores[]);
 //
 
+//liga
 void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores,HashMap *Objetos, int ganador);
-
-#define MAX 25
+//
 #endif /* main_h */

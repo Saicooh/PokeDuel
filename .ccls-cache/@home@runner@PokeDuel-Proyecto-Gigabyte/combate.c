@@ -1,4 +1,4 @@
-  #include "main.h"
+#include "main.h"
 
 int calculoDano(HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores, Pokemon *PokeAtaca, Pokemon *PokeRecibe, Ataque ataque)
 {
@@ -179,8 +179,6 @@ void mostrarEquipoEnemigo(Entrenador entrenadores[], HashMap *Pokedex)
   entrenadores[1].sizeTeam = 6;
   entrenadores[1].cantidadVivos = 6;
 }
-
-
 
 void reiniciar(Entrenador entrenadores[])
 {
@@ -446,7 +444,6 @@ void contadorBajando(Entrenador entrenadores[], int vidaActual, int danio, int e
   
   printf("%d/%d) PS - LVL. 100\n\n",entrenadores[entrenadorPos].equipo[0].saludActual, entrenadores[entrenadorPos].equipo[0].salud);
 }
-
 
 int dificultadNormal(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores)
 {

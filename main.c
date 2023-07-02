@@ -90,6 +90,119 @@ void agregarPokemon(Entrenador entrenadores[], int *equipoRegistrado, HashMap *P
 }
 
 
+void administrarOrden(Entrenador entrenadores[])
+{
+  char cadenaCompleta[1000];
+  int size = entrenadores[0].sizeTeam;
+  
+  if (entrenadores[0].sizeTeam == 1)
+  {
+    escribirLentamente("Solo hay un Pokemon en el equipo, debes anadir al menos uno mas para acceder a esta funcion.",2);
+    return;
+  }
+  
+  int pos1, pos2;
+  Pokemon aux;
+
+  verEquipoActual(entrenadores);
+  
+  escribirLentamente("Ingresa posicion del Pokemon de origen:",1);
+  scanf("%i", &pos1);
+  pos1--;
+
+  while(pos1 > size - 1 || pos1 < 0)
+  {
+    if (pos1 > size - 1) printf("\nIngresa posicion del Pokemon de origen valida, el equipo solo tiene %i Pokemon:\n", entrenadores[0].sizeTeam);
+    if(pos1 < 0) printf("\nEl numero ingresado es invalido, ingresa un numero positivo:\n");
+    scanf("%i", &pos1);
+    pos1--;
+  }
+  
+  puts("");
+  escribirLentamente("Ingresa posicion del Pokemon de destino:",1);
+  scanf("%i", &pos2);
+  pos2--;
+
+  while(pos2 > size - 1 || pos2 < 0)
+  {
+    if (pos2 > size - 1) printf("\nIngresa posicion del Pokemon de destino valida, el equipo solo tiene %i Pokemon:\n", entrenadores[0].sizeTeam);
+    if(pos2 < 0) printf("\nEl numero ingresado es invalido, ingresa un numero positivo:\n");
+    scanf("%i", &pos2);
+    pos2--;
+  }
+  
+  if (pos1 == pos2)
+  {
+    escribirLentamente("No se ha hecho ningun cambio, las posiciones son iguales.",1);
+    return;
+  }
+  
+  aux = entrenadores[0].equipo[pos1];
+  entrenadores[0].equipo[pos1] = entrenadores[0].equipo[pos2];
+  entrenadores[0].equipo[pos2] = aux;
+
+  sprintf(cadenaCompleta, "\nPokemon '%s' ha sido intercambiado de posicion con '%s'!\n\n", entrenadores[0].equipo[pos1].nombre, entrenadores[0].equipo[pos2].nombre);
+  escribirLentamente(cadenaCompleta, 0);
+}
+
+void verEquipoActual(Entrenador entrenadores[])
+{
+  int size = entrenadores[0].sizeTeam;
+
+  char encabezado[50];
+  sprintf(encabezado, "Equipo Pokemon de '%s'", entrenadores[0].nombre);
+  int espaciosExtra = calcularEspaciosExtra(strlen(encabezado), 50);
+
+  puts("+--------------------------------------------------+");
+  printf("|%*s%*s|\n", espaciosExtra + (int) strlen(encabezado), encabezado, espaciosExtra, "");
+  puts("+----+----------------------+---------+------------+");
+  printf("| No | %-20s |   %-5s |    LVL     |\n", "Nombre", "PS");
+  puts("+----+----------------------+---------+------------+");
+  
+  for (int i = 0 ; i < size ; i++)
+  {
+    char pokemon_info[31];
+    sprintf(pokemon_info, "%-20s | %-3d/%-3d", entrenadores[0].equipo[i].nombre, entrenadores[0].equipo[i].saludActual, entrenadores[0].equipo[i].salud);
+    espaciosExtra = calcularEspaciosExtra(strlen(pokemon_info), 30);  // 30 = longitud total del campo - 1
+
+    printf("| %-2d | %*s%*s |  LVL. 100  |\n", i + 1, espaciosExtra + (int) strlen(pokemon_info), pokemon_info, espaciosExtra, "");
+  }
+  
+  puts("+----+----------------------+---------+------------+");
+  puts("");
+}
+
+void eliminarPokemon(Entrenador entrenadores[])
+{
+  char cadenaCompleta[1000];
+  bool encontrado = false;
+  int pokemonElim;
+  char *auxPokeElim = malloc(MAX * sizeof(char));
+  verEquipoActual(entrenadores);
+  
+  escribirLentamente("Ingrese Pokemon a eliminar del equipo:",1);
+  
+  scanf("%i", &pokemonElim);
+  pokemonElim--;
+  
+  strcpy(auxPokeElim, entrenadores[0].equipo[pokemonElim].nombre);
+  
+  int i = 0;
+
+  entrenadores[0].equipo[pokemonElim].nombre[0] = '\0';
+  entrenadores[0].sizeTeam--;
+
+  for (int i = pokemonElim; i < entrenadores[0].sizeTeam - 1; i++)
+  {
+    entrenadores[0].equipo[i] = entrenadores[0].equipo[i + 1];
+  }
+  
+  sprintf(cadenaCompleta, "\nPokemon '%s' ha sido eliminado del equipo!\n\n", auxPokeElim);
+  escribirLentamente(cadenaCompleta, 0);
+}
+
+
+
 void administrarPokemon(Entrenador entrenadores[], int *equipoRegistrado, int *volverMenu, HashMap *Pokedex)
 {
   escribirLentamente("Que deseas realizar?",2);
@@ -121,7 +234,7 @@ void administrarPokemon(Entrenador entrenadores[], int *equipoRegistrado, int *v
       
       case 4 :
       if (!*equipoRegistrado) break;  
-      //verEquipoActual(entrenadores); break;
+      verEquipoActual(entrenadores); break;
       
       case 5 : return;
     }
