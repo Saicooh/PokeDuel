@@ -5,6 +5,8 @@ void menu();
 
 void validarOpcion(int *opcion);
 
+void validarOpcionPokemon(int *opcion, int equipoRegistrado);
+
 void validar(int *user_continue);
 
 char *gets_csv_field(char *tmp, int k);

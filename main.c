@@ -25,6 +25,108 @@ void mostrarPokedex(HashMap *Pokedex)
   puts("");
 }
 
+void agregarPokemon(Entrenador entrenadores[], int *equipoRegistrado, HashMap *Pokedex)
+{
+  char pokemonPKDX[MAX];
+  int buscar;
+  int size = entrenadores[0].sizeTeam;
+  char cadenaCompleta[1000];
+  
+  if(size == 6)
+  {
+    escribirLentamente("El equipo esta lleno! No puedes agregar mas Pokemon.",2);
+    return;
+  }
+  
+  escribirLentamente("Ingrese numero de la Pokedex del Pokemon a agregar:",2);
+  
+  while(1)
+  {
+    scanf("%15s", pokemonPKDX);
+    getchar();
+    
+    buscar = atoi(pokemonPKDX);
+    
+    if (buscar < 1 || buscar > 151)
+    {
+      puts("");
+      escribirLentamente("Ingrese un numero valido entre 1 y 151.",1);
+    }
+    else break;
+  }
+
+  Pair *pokeBusc = searchMap(Pokedex, pokemonPKDX);
+
+  Pokemon *pokemonOriginal = pokeBusc -> value;
+
+  Pokemon *pokeAux = malloc(sizeof(Pokemon));
+
+  *pokeAux = *pokemonOriginal;
+
+  sprintf(cadenaCompleta, "\nPokemon: '%s', deseas agregarlo a tu equipo? (s/n)\n", pokeAux -> nombre);
+
+  escribirLentamente(cadenaCompleta, 0);
+
+  char salida[2];
+  scanf("%1s", salida);
+  
+  if(strcmp(salida, "n") == 0) 
+  {
+    puts("");
+    escribirLentamente("No se agrego ningun Pokemon.",2);
+    return;
+  }
+  
+  puts("");
+
+  size++;
+  escribirLentamente("Pokemon agregado!",2);
+  sleep(1);
+  entrenadores[0].equipo[entrenadores[0].sizeTeam] = *pokeAux;
+  entrenadores[0].sizeTeam = size;
+  entrenadores[0].cantidadVivos = size;
+  
+  *equipoRegistrado = 1;
+}
+
+
+void administrarPokemon(Entrenador entrenadores[], int *equipoRegistrado, int *volverMenu, HashMap *Pokedex)
+{
+  escribirLentamente("Que deseas realizar?",2);
+
+  int opcion = 0;
+  
+  while (opcion != 5)
+  {
+    puts("1. Agregar Pokemon a tu equipo.");
+    usleep(250000);
+    puts("2. Eliminar Pokemon de tu equipo.");
+    usleep(250000);
+    puts("3. Administrar orden de equipo.");
+    usleep(250000);
+    puts("4. Ver tu equipo actual.");
+    usleep(250000);
+    puts("5. Volver al menu.\n");
+    usleep(250000);
+    
+    validarOpcionPokemon(&opcion, *equipoRegistrado);
+    
+    switch (opcion)
+    {
+      case 1 : agregarPokemon(entrenadores, equipoRegistrado, Pokedex); break;
+      case 2 : //eliminarPokemon(entrenadores); break;
+      
+      case 3 : //administrarOrden(entrenadores); break;
+      
+      case 4 :
+      if (!*equipoRegistrado) break;  
+      //verEquipoActual(entrenadores); break;
+      
+      case 5 : return;
+    }
+  }
+}
+
 int main()
 {
 /*
@@ -87,7 +189,7 @@ int main()
         break;
 
       case 2 :
-        //administrarPokemon(entrenadores, &equipoRegistrado, &volverMenu, Pokedex);
+        administrarPokemon(entrenadores, &equipoRegistrado, &volverMenu, Pokedex);
         break;
 
       case 3 :

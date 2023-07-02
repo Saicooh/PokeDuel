@@ -36,6 +36,35 @@ void validarOpcion(int *opcion) // Valida las opciones del menú.
   }
 }
 
+void validarOpcionPokemon(int *opcion, int equipoRegistrado) // Valida las opciones del menú.
+{
+  char opcionAux[MAX];
+  
+  while (true) 
+  {
+    scanf("%15s", opcionAux);
+    printf("\n");
+      
+    if (isdigit(*opcionAux)) 
+    {
+      *opcion = atoi(opcionAux);
+        
+      if (*opcion >= 1 && *opcion <= 5)
+      {
+        if(*opcion != 1  && *opcion != 5 && !equipoRegistrado) 
+        {
+          puts("Debes registrar al menos un Pokemon en tu equipo para acceder a esta opcion!\n");
+          *opcion = 0;
+        }
+      }
+      else printf("Debe ingresar un numero valido entre 1 y 5.\n");
+    }
+    else printf("Debe ingresar un numero valido entre 1 y 5.\n");
+    break;
+    getchar();
+  }
+}
+
 void validar(int *user_continue) // Validamos que el usuario desee seguir con la ejecución del programa.
 {
   char salida[2];
