@@ -9,4 +9,6 @@ void cargarObjetos(HashMap *Objetos);
 
 void cargarMovimientos(HashMap *Movimientos);
 
+void cargarEntrenadoresLiga(Entrenador entrenadores[], HashMap *Pokedex);
+
 #endif /* importar_h */

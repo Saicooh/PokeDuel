@@ -52,6 +52,7 @@ void cargarPokedex(HashMap *Pokedex, HashMap *Movimientos)
   }
   fclose(fp);
 }
+
 void cargarObjetos(HashMap *Objetos)
 {
   FILE *fp = fopen("pokemon_objetos.csv", "r");
@@ -119,3 +120,38 @@ void cargarMovimientos(HashMap *Movimientos)
   fclose(fp);
 }
 
+void cargarEntrenadoresLiga(Entrenador entrenadores[], HashMap *Pokedex)
+{
+  FILE *fp = fopen("pokemon_entrenadores_liga.csv", "r");
+
+  char linea[1024];
+  fgets(linea, 1023, fp);
+  int j;
+
+  Pair *auxPok;
+  Pokemon *auxPok2;
+
+  for (j = 2; j < 7; j++)
+  {
+    entrenadores[j].sizeTeam = 6;
+    entrenadores[j].cantidadVivos = 6;
+    
+    if (fgets(linea, 1023, fp) == NULL) break;
+
+    auxPok2 = malloc(sizeof(Pokemon));
+    
+    for(int i = 0; i < 7; i++)
+    {
+      char *aux = gets_csv_field(linea, i);
+      if(i == 0) strcpy(entrenadores[j].nombre, aux); 
+      else
+      {
+        auxPok = searchMap(Pokedex, aux);
+        auxPok2 = auxPok -> value;
+        entrenadores[j].equipo[i-1] = *auxPok2;
+      }
+    }
+  }
+  free(auxPok2);
+  fclose(fp);
+}

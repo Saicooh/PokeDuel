@@ -341,6 +341,7 @@ int main()
   cargarMovimientos(Movimientos);
   cargarPokedex(Pokedex, Movimientos);
   cargarObjetos(Objetos);
+  cargarEntrenadoresLiga(entrenadores, Pokedex);
   
   
   while(user_continue)
