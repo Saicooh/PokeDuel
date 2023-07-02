@@ -419,6 +419,7 @@ int dificultadDificil(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movi
   
   return danio;
 }
+
 void mostrarCreditos()
 {
   char *creditos[] =

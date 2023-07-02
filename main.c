@@ -551,6 +551,121 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
   }
 }
 
+void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores,HashMap *Objetos, int ganador)
+{
+  char cadenaCompleta[1000];
+  
+  printf("\033[2J\033[H");
+
+  //playSongType(3,0,0);
+
+  escribirLentamente("BIENVENIDO A LA LIGA POKEMON!!", 2);
+  sleep(2);
+  escribirLentamente("Te enfrentaras contra entrenadores muy duros a continuacion !!", 2);
+  sleep(2);
+  escribirLentamente("Si pierdes contra alguno de ellos, perderas todo tu progreso y tendras que empezar de nuevo !", 2);
+  sleep(2);
+  escribirLentamente("Recuerda que no puedes huir.", 2);
+  sleep(2);
+  escribirLentamente("Buena suerte!!", 2);
+  sleep(4);
+
+  for(int entrenadorPos = 2 ; entrenadorPos < 7 ; entrenadorPos++)
+  {
+    entrenadores[0].equipo[0].ataque = entrenadores[0].equipo[0].ataqueBase;
+    entrenadores[0].equipo[0].defensa = entrenadores[0].equipo[0].defensaBase;
+    
+    printf("\033[2J\033[H");
+    
+    if (entrenadorPos == 6)
+    {
+      //playSongType(7,0,0);
+
+      sleep(1);
+
+      escribirLentamente("Hola .......", 2);
+      sleep(2);
+
+      escribirLentamente("Soy el campeon .............", 0);
+      escribirLentamente("Ignacio Araya ...", 2);
+      sleep(2);
+
+      escribirLentamente("Te felicito por llegar hasta aqui ............", 2);
+      sleep(2);
+
+      escribirLentamente("Pero no te dejare ganar tan facilmente ............", 2);
+      sleep(2);
+      
+      //playSongType(9,1,0);
+      printf("\033[2J\033[H");
+      sleep(1);
+    }
+    else
+    {
+      //playSongType(4,1,entrenadorPos-2,0);
+      puts("");
+      sprintf(cadenaCompleta, "Te enfrentaras contra %s!",entrenadores[entrenadorPos].nombre);
+      escribirLentamente(cadenaCompleta, 1);
+      sleep(3);
+    }
+    while(true)
+    {
+      entrenamientoPokemon(entrenadores, Pokedex, Movimientos, Multiplicadores, entrenadorPos, &ganador);
+      
+      if(ganador == 0)
+      {
+        sleep(2);
+        sprintf(cadenaCompleta, "%s se ha quedado sin Pokemon disponibles!", entrenadores[entrenadorPos].nombre);
+
+        escribirLentamente(cadenaCompleta, 2);
+        sleep(2);
+
+        escribirLentamente("Has perdido ...", 1);
+        sleep(2);
+
+        //playSongType(1,1,0,0);
+        system("cls");
+        return;
+      }
+      else
+      {
+        //if(entrenadorPos == 6) //playSongType(6,0,0);
+        //else //playSongType(5,0,0);
+        sprintf(cadenaCompleta, "Has derrotado a %s!!", entrenadores[entrenadorPos].nombre);
+        escribirLentamente(cadenaCompleta, 2);
+        sleep(4);
+        
+        if(entrenadorPos != 6)
+        {
+          int opcionBatallaLiga = 0;
+          
+          while(opcionBatallaLiga != 3)
+          {
+            printf("Que desea hacer?\n\n");
+            printf("1. Administar Pokemon.\n");
+            printf("2. Usar Objeto.\n");
+            printf("3. Continuar con las batallas.\n");
+            
+            scanf("%d", &opcionBatallaLiga);
+              
+            switch(opcionBatallaLiga)
+            {
+              case 1: administrarOrden(entrenadores); break;
+    
+              case 2: usarObjeto(entrenadores); break;
+            }
+          }
+        }
+        break;
+      }
+    }
+  }
+  
+  salonDeLaFama(entrenadores);
+  reiniciar(entrenadores);
+  return;
+}
+
 int main()
 {
 /*
@@ -598,7 +713,9 @@ int main()
   cargarObjetos(Objetos);
   cargarEntrenadoresLiga(entrenadores, Pokedex);
   
-  
+  int ganador;
+
+  entrenadores[0].cantidadObj = 0;
   
   while(user_continue)
   {
@@ -629,11 +746,11 @@ int main()
         break;
 
       case 4 :
-        //entrenamientoPokemon(entrenadores, Pokedex, Movimientos, Multiplicadores, entrenadorPos, &ganador);
+        entrenamientoPokemon(entrenadores, Pokedex, Movimientos, Multiplicadores, entrenadorPos, &ganador);
         break;
 
       case 5 :
-        //ligaPokemon(entrenadores, Pokedex, Movimientos, Multiplicadores, Objetos, &ganador);
+        ligaPokemon(entrenadores, Pokedex, Movimientos, Multiplicadores, Objetos, &ganador);
         validar(&user_continue);
         //playSongType(1,1,0,0);
         break;

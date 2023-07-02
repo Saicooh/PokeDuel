@@ -12,6 +12,8 @@ void reiniciar(Entrenador entrenadores[]);
 
 int dificultadNormal(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores);
 
+int dificultadDificil(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores, int posicion);
+
 void salonDeLaFama(Entrenador entrenadores[]);
 
 #endif /* COMBATE_H */
