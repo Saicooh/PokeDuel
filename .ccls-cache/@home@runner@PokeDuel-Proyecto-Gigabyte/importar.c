@@ -61,8 +61,6 @@ void cargarObjetos(HashMap *Objetos)
   char *cont;
   
   fgets(linea, 1023, fp);
-
-  // Mover la inicialización del contador aquí
   int contador = 1;
   
   while(fgets(linea, 1023, fp) != NULL)
@@ -86,3 +84,38 @@ void cargarObjetos(HashMap *Objetos)
   }
   fclose(fp);
 }
+
+void cargarMovimientos(HashMap *Movimientos)
+{
+  FILE *fp = fopen("pokemon_movimientos.csv", "r");
+
+  char linea[1024];
+  int i;
+
+  fgets(linea, 1023, fp);
+  
+  while(fgets(linea, 1023, fp) != NULL)
+  {
+    Ataque *ataqueAux = malloc(sizeof(Ataque));
+
+    for(int i = 0; i < 9; i++)
+    {
+      char *aux = gets_csv_field(linea, i);
+      switch(i)
+      {
+        case 0 : strcpy(ataqueAux -> nombre, aux); break;
+        case 1 : ataqueAux -> potencia = atoi(aux); break;
+        case 2 : strcpy(ataqueAux -> tipo, aux); break;
+        case 3 : ataqueAux -> precision = atoi(aux); break;
+        case 4 : ataqueAux -> numUsosMAX = atoi(aux); ataqueAux -> numUsosActual = atoi(aux); break;
+        case 5 : ataqueAux -> efectoAtaque = atof(aux); break;
+        case 6 : ataqueAux -> efectoDefensa = atof(aux); break;
+        case 7 : ataqueAux -> efectoSalud = atof(aux); break;
+        case 8 : ataqueAux -> direccion = atoi(aux); break;
+      }
+    }
+    insertMap(Movimientos, ataqueAux -> nombre, ataqueAux);
+  }
+  fclose(fp);
+}
+

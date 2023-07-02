@@ -128,6 +128,175 @@ void administrarPokemon(Entrenador entrenadores[], int *equipoRegistrado, int *v
   }
 }
 
+void mostrarObjetos(HashMap *Objetos)
+{
+  Pair *auxMapa = firstMap(Objetos);
+  int contador = 1;
+  char *id = malloc(5 * sizeof(char));
+  puts("+-----------------------------------+");
+  puts("|        Listado de Objetos         |");
+  puts("+-----------------------------------+");
+  printf("| %-3s | %-27s |\n", "ID.", "Nombre");
+  puts("+-----+-----------------------------+");
+  
+  while (contador != 14)
+  {
+    sprintf(id, "%i", contador);
+    Pair *auxObjetos = searchMap(Objetos, id);
+    Objeto *aux = auxObjetos -> value;
+    
+    printf("| %-3s | %-27s |\n", id, aux->nombre);
+    contador++;
+    auxMapa = nextMap(Objetos);
+  }
+
+  puts("+-----+-----------------------------+");
+  sleep(1);
+  puts("");
+}
+
+
+void mostrarMochila(Entrenador entrenadores[]) 
+{
+  escribirLentamente("Objetos en la mochila:",2);
+  sleep(1);
+
+  if(entrenadores[0].cantidadObj == 0)
+  {
+    escribirLentamente("No hay objetos en la mochila",2);
+    sleep(1);
+    return;
+  }
+
+  for (int i = 0 ; i < entrenadores[0].cantidadObj ; i++)
+  {
+    printf("%i. %s (Cantidad : %i)\n", i+1, entrenadores[0].mochila[i].nombre, entrenadores[0].mochila[i].cantidad);
+  }
+}
+
+void eliminarObjeto(Entrenador entrenadores[])
+{
+  mostrarMochila(entrenadores);
+  int numObj;
+  int eliminar;
+  char cadenaCompleta[1000];
+  char item[MAX];
+  
+  puts("");
+  escribirLentamente("Ingrese el objeto que desea eliminar de su mochila:",1);
+  scanf("%i", &numObj);
+  puts("");
+  escribirLentamente("Ingrese la cantidad que desea eliminar",1);
+  scanf("%d",&eliminar);
+  numObj--;
+  
+  if(eliminar == 0 || numObj > entrenadores[0].cantidadObj)
+  {
+    puts("");
+    escribirLentamente("Ingrese un Objeto o Cantidad Valida",1);
+    sleep(1);
+    return eliminarObjeto(entrenadores);
+  }
+  
+  if(eliminar == entrenadores[0].mochila[numObj].cantidad)
+  {
+    char *aux = malloc(MAX * sizeof(char));
+    strcpy(aux, entrenadores[0].mochila[numObj].nombre);
+    
+    for (int i = numObj; i < entrenadores[0].cantidadObj - 1; i++) 
+    {
+      entrenadores[0].mochila[i] = entrenadores[0].mochila[i + 1];
+    }
+    
+    sprintf(cadenaCompleta, "\nEl objeto: %s ha sido eliminado de la mochila.\n",aux);
+
+    escribirLentamente(cadenaCompleta, 0);
+    
+    free(aux);
+
+    entrenadores[0].mochila = realloc(entrenadores[0].mochila, (entrenadores[0].cantidadObj - 1) * sizeof(Objeto));
+    
+    entrenadores[0].cantidadObj--;
+    return;
+  }
+  else entrenadores[0].mochila[numObj].cantidad -= eliminar;
+  
+  printf("Se le ha restado %i a %s", eliminar, entrenadores[0].mochila[numObj].nombre);
+
+}
+
+void agregarObjeto(HashMap *Objetos ,Entrenador entrenadores[])
+{
+  char item[3];
+  int indice;
+  int cantidad; 
+
+  mostrarObjetos(Objetos);
+  
+  puts("\nIngrese el objeto a anadir:\n");
+  scanf("%d", &indice);
+  puts("\nIngrese la cantidad que quiere agregar (Max 99):");
+  scanf("%d", &cantidad);
+
+  sprintf(item,"%i",indice);
+
+  while (cantidad < 0 || cantidad > 99)
+  {
+    puts("\nIngrese una cantidad valida (entre 0 y 99):");
+    scanf("%d", &cantidad);
+  }
+  
+  entrenadores[0].mochila = realloc(entrenadores[0].mochila, (entrenadores[0].cantidadObj + 1) * sizeof(Objeto));
+
+  Pair *objetoPair = searchMap(Objetos,item);
+
+  Objeto *auxObjeto = malloc(sizeof(Objeto));
+  
+  Objeto *auxObjetoOriginal = objetoPair->value;
+
+  *auxObjeto = *auxObjetoOriginal;
+    
+  auxObjeto -> cantidad = cantidad;
+    
+  entrenadores[0].mochila[entrenadores[0].cantidadObj] = *auxObjeto;
+  entrenadores[0].cantidadObj++;
+}
+
+
+void administrarObjetos(HashMap *Objetos, Entrenador entrenadores[])
+{
+  printf("\033[2J\033[H");
+  
+  int opcion;
+
+  while (1)
+  {
+    puts("\nQue deseas realizar?\n");
+    puts("1. Ver todos los objetos disponibles.");
+    usleep(250000);
+    puts("2. Agregar un objeto a tu mochila.");
+    usleep(250000);
+    puts("3. Ver tus objetos.");
+    usleep(250000);
+    puts("4. Eliminar un objeto de la mochila.");
+    usleep(250000);
+    puts("5. Volver al menu.\n");
+
+    scanf("%d", &opcion);
+    getchar();
+
+    switch (opcion)
+    {
+      case 1 : mostrarObjetos(Objetos); break;
+      case 2 : agregarObjeto(Objetos, entrenadores); break;
+      case 3 : mostrarMochila(entrenadores); break;
+      case 4 : eliminarObjeto(entrenadores); break;
+      case 5 : return;
+      default : puts("Ingrese una opcion valida.");
+    }
+  }
+}
+
 int main()
 {
 /*
@@ -169,6 +338,11 @@ int main()
   HashMap *Objetos = createMap(15);
   HashMap *Multiplicadores = createMap(225);
 
+  cargarMovimientos(Movimientos);
+  cargarPokedex(Pokedex, Movimientos);
+  cargarObjetos(Objetos);
+  
+  
   while(user_continue)
   {
     printf("\033[2J\033[H");
