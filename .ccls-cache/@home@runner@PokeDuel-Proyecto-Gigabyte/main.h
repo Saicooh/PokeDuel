@@ -14,5 +14,17 @@
 #include "structs.h"
 #include "funciones.h"
 
+
+void mostrarPokedex(HashMap *Pokedex);
+
+//
+void administrarPokemon(Entrenador entrenadores[], int *equipoRegistrado, int *volverMenu, HashMap *Pokedex);
+
+void agregarPokemon(Entrenador entrenadores[], int *equipoRegistrado, HashMap *Pokedex);
+void eliminarPokemon(Entrenador entrenadores[]);
+void administrarOrden(Entrenador entrenadores[]);
+void verEquipoActual(Entrenador entrenadores[]);
+//
+
 #define MAX 25
 #endif /* main_h */

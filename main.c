@@ -114,6 +114,7 @@ void administrarPokemon(Entrenador entrenadores[], int *equipoRegistrado, int *v
     switch (opcion)
     {
       case 1 : agregarPokemon(entrenadores, equipoRegistrado, Pokedex); break;
+      
       case 2 : //eliminarPokemon(entrenadores); break;
       
       case 3 : //administrarOrden(entrenadores); break;
