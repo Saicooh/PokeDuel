@@ -36,6 +36,27 @@ void validarOpcion(int *opcion) // Valida las opciones del menú.
   }
 }
 
+void validar(int *user_continue) // Validamos que el usuario desee seguir con la ejecución del programa.
+{
+  char salida[2];
+  
+  printf("Desea realizar otra operacion? (s/n)\n");
+  scanf("%1s", salida);
+  
+  if(strcmp(salida, "n") == 0)
+  {
+    *user_continue = 0;
+    printf("\nGracias por usar PokeDuel, esperamos que hayas disfrutado del juego!");
+    exit(EXIT_SUCCESS);
+  }
+  else while (strcmp(salida, "s") != 0)
+  {
+    printf("Ingrese una opcion valida\n\n");
+    printf("Desea realizar otra operacion? (s/n)\n");
+    scanf("%1s", salida);
+  }
+}
+
 char *gets_csv_field(char *tmp, int k) //
 {
   int open_mark = 0;

@@ -28,5 +28,62 @@ int main()
   
   scanf("%s", trainer_username);
   getchar();
+
+  int user_continue = 1, equipoRegistrado = 0;
+  
+  Entrenador entrenadores[7];
+  
+  strcpy(entrenadores[0].nombre, trainer_username);
+
+  HashMap *Pokedex = createMap(151);
+  HashMap *Movimientos = createMap(105);
+  HashMap *Objetos = createMap(15);
+  HashMap *Multiplicadores = createMap(225);
+
+  while(user_continue)
+  {
+    printf("\033[2J\033[H");
+    int volverMenu = 0;
+    menu();
+    
+    int opcion = 0;
+    int entrenadorPos = 1;
+    
+    validarOpcion(&opcion);
+    
+    if(equipoRegistrado == 0 && opcion != 1 && opcion != 2 && opcion != 3 && opcion != 6) printf("Debes registrar al menos un Pokemon en tu equipo para acceder!\n");
+      
+    else switch(opcion)
+    {
+      case 1 :
+        //mostrarPokedex(Pokedex);
+        validar(&user_continue);
+        break;
+
+      case 2 :
+        //administrarPokemon(entrenadores, &equipoRegistrado, &volverMenu, Pokedex);
+        break;
+
+      case 3 :
+        //administrarObjetos(Objetos,entrenadores);
+        break;
+
+      case 4 :
+        //entrenamientoPokemon(entrenadores, Pokedex, Movimientos, Multiplicadores, entrenadorPos, &ganador);
+        break;
+
+      case 5 :
+        //ligaPokemon(entrenadores, Pokedex, Movimientos, Multiplicadores, Objetos, &ganador);
+        validar(&user_continue);
+        //playSongType(1,1,0,0);
+        break;
+
+      case 6 : 
+        escribirLentamente("Gracias por usar PokeDuel, esperamos que hayas disfrutado del juego!", 0);
+        exit(EXIT_SUCCESS);
+    }
+  }
+  
+  return 0;
   
 }
