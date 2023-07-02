@@ -342,6 +342,7 @@ int main()
   cargarPokedex(Pokedex, Movimientos);
   cargarObjetos(Objetos);
   cargarEntrenadoresLiga(entrenadores, Pokedex);
+  cargarMultiplicadores(Multiplicadores);
   
   
   while(user_continue)

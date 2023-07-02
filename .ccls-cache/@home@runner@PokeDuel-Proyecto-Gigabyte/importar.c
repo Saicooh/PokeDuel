@@ -120,6 +120,40 @@ void cargarMovimientos(HashMap *Movimientos)
   fclose(fp);
 }
 
+void cargarMultiplicadores(HashMap *multiplicadores)
+{
+  FILE *fp = fopen("pokemon_multiplicadores.csv", "r");
+
+  char linea[1024];
+  int i;
+
+  fgets(linea, 1023, fp);
+  
+  while(fgets(linea, 1023, fp) != NULL)
+  {
+    TipoElem *multi = malloc(sizeof(TipoElem));
+
+    for(i = 0; i < 2; i++)
+    {
+      char *aux = gets_csv_field(linea, i);
+      
+      switch(i)
+      {
+        case 0 : strcpy(multi -> nombre, aux); break;
+        case 1 : multi -> multiplicador = atof(aux); break;
+      }
+    }
+    
+    float multiplicador = multi -> multiplicador;
+    float *ptr_multiplicador = malloc(sizeof(float));
+    
+    *ptr_multiplicador = multiplicador;
+
+    insertMap(multiplicadores, multi -> nombre, ptr_multiplicador);
+  }
+  fclose(fp);
+}
+
 void cargarEntrenadoresLiga(Entrenador entrenadores[], HashMap *Pokedex)
 {
   FILE *fp = fopen("pokemon_entrenadores_liga.csv", "r");
