@@ -363,17 +363,14 @@ void info(Entrenador entrenadores[], bool first, int danio, int posicion)
   escribirLentamente(cadenaCompleta, 0);
   sprintf(cadenaCompleta, "(%i/%i) PS - LVL. 100\n\n", entrenadores[0].equipo[0].saludActual, entrenadores[0].equipo[0].salud);
   escribirLentamente(cadenaCompleta, 0);
-  //printf("Tu Pokemon: %s ", entrenadores[0].equipo[0].nombre);
-  //printf("(%i/%i) PS - LVL. 100\n\n", entrenadores[0].equipo[0].saludActual, entrenadores[0].equipo[0].salud);
 
   if (first)
   {
     sprintf(cadenaCompleta, "Pokemon Enemigo: %s ", entrenadores[posicion].equipo[0].nombre);
     escribirLentamente(cadenaCompleta, 0);
-    //printf("Pokemon Enemigo: %s ", entrenadores[posicion].equipo[0].nombre);
     sprintf(cadenaCompleta, "(%i/%i) PS - LVL. 100\n\n", entrenadores[posicion].equipo[0].saludActual, entrenadores[posicion].equipo[0].salud);
     escribirLentamente(cadenaCompleta, 0);
-    //printf("(%i/%i) PS - LVL. 100\n\n", entrenadores[posicion].equipo[0].saludActual, entrenadores[posicion].equipo[0].salud);
+
   }
   else
   {

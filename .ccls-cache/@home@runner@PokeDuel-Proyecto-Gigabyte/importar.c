@@ -1,4 +1,4 @@
-#include "main.h"
+  #include "main.h"
 
 void cargarPokedex(HashMap *Pokedex, HashMap *Movimientos)
 {
@@ -62,6 +62,7 @@ void cargarObjetos(HashMap *Objetos)
   char *cont;
   
   fgets(linea, 1023, fp);
+  
   int contador = 1;
   
   while(fgets(linea, 1023, fp) != NULL)
