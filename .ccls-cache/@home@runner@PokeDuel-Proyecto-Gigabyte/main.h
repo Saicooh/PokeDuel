@@ -39,5 +39,13 @@ void eliminarObjeto(Entrenador entrenadores[]);
 //
 void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores,int entrenadorPos, int *ganador);
 
+void mostrarEquipoEnemigo(Entrenador entrenadores[], HashMap *Pokedex);
+void atacar(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores, int *danio, int posicion, int *vivo, int *ganador);
+void info(Entrenador entrenadores[], bool first, int danio, int posicion);
+void cambiarPokemon(char *auxNombre, Entrenador entrenadores[]);
+//
+
+void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores,HashMap *Objetos, int ganador);
+
 #define MAX 25
 #endif /* main_h */

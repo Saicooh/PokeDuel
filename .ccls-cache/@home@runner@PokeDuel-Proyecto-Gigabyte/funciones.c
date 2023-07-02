@@ -153,4 +153,7 @@ void escribirLentamente(char* cadena, int saltosLinea)
   }
 }
 
-
+int calcularEspaciosExtra(int largoCadena, int ancho)
+{
+  return (ancho - largoCadena) / 2;
+}

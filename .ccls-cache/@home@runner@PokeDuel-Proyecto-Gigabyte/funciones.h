@@ -13,4 +13,6 @@ char *gets_csv_field(char *tmp, int k);
 
 void escribirLentamente(char *texto, int saltosLinea);
 
+int calcularEspaciosExtra(int largoCadena, int ancho);
+
 #endif /* funciones_h */
