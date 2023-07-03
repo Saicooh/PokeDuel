@@ -50,6 +50,8 @@ Después de compilar el proyecto, puedes ejecutar el simulador usando el comando
 
 Este simulador posee archivos de audio, para poder escucharlos, debes "descomentar" todas las líneas de código que sean ```playSound()``` en el ```main.c``` y también "descomentar" la función llamada ```playSoundType()``` del archivo ```funciones.c```
 
+Además debes incluir la [música](https://drive.google.com/drive/u/0/folders/1IqZd91lmiJQnD2M6gaNWJ4-1t1HiqUGu) en la carpeta descargada, si es que no lo está
+
 ## Precauciones al usar el programa.
 
 1. Para evitar erorres, es recomendable que se ingrese solo lo pedido. Esto es debido a que hay algunas opciones no validadas.

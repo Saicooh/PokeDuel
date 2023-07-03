@@ -201,8 +201,6 @@ void eliminarPokemon(Entrenador entrenadores[])
   escribirLentamente(cadenaCompleta, 0);
 }
 
-
-
 void administrarPokemon(Entrenador entrenadores[], int *equipoRegistrado, int *volverMenu, HashMap *Pokedex)
 {
   escribirLentamente("Que deseas realizar?",2);
@@ -267,7 +265,6 @@ void mostrarObjetos(HashMap *Objetos)
   sleep(1);
   puts("");
 }
-
 
 void mostrarMochila(Entrenador entrenadores[]) 
 {
@@ -822,10 +819,11 @@ int main()
   cargarPokedex(Pokedex, Movimientos);
   cargarObjetos(Objetos);
   cargarEntrenadoresLiga(entrenadores, Pokedex);
+  
   strcpy(entrenadores[1].nombre, "Jessica");
   
   int ganador;
-
+  
   entrenadores[0].cantidadObj = 0;
   
   while(user_continue)
@@ -873,5 +871,4 @@ int main()
   }
   
   return 0;
-  
 }

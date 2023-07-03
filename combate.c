@@ -482,7 +482,6 @@ int dificultadDificil(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movi
   
   Ataque *ataq = firstList(entrenadores[posicion].equipo[0].habilidades);
 
-  
   for(int i = 0 ; i < 4 ; i++)
   {
     strcpy(tipoAtaq,ataq->tipo);
