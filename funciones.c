@@ -1,4 +1,5 @@
 #include "main.h"
+#include "windows.h"
 
 void menu() // Opciones del menú.
 {
@@ -134,33 +135,9 @@ char *gets_csv_field(char *tmp, int k) //
   return NULL;
 }
 
-void escribirLentamente(char* cadena, int saltosLinea) 
+void playSongType(int type, int loop, int numLiga, int stop)
 {
-  for (int i = 0; cadena[i] != '\0'; i++) 
-  {
-    printf("%c", cadena[i]); 
-    fflush(stdout); 
-    usleep(2);
-  }
-  
-  switch (saltosLinea)
-  {
-    case 1 : puts(""); break;
-    case 2 : puts("\n"); break;
-    case 3 : puts("\n\n"); break;
-    case 4 : puts("\n\n\n"); break;
-    case 5 : puts("\n\n\n\n"); break;
-  }
-}
-
-int calcularEspaciosExtra(int largoCadena, int ancho)
-{
-  return (ancho - largoCadena) / 2;
-}
-
-/*void playSongType(int type, int loop, int numLiga) 
-{
-  PlaySound(NULL, 0, SND_ASYNC);
+  if (!stop) PlaySound(NULL, 0, SND_ASYNC);
 
   char *cancionesMenu[] =
   {
@@ -216,6 +193,12 @@ int calcularEspaciosExtra(int largoCadena, int ancho)
   {
     "musiquita\\araya.wav",
   }; // 9
+
+  char *cancionLowHP[] =
+  {
+    "musiquita\\lowhp.wav",
+  }; // 10
+
   char **cancionesSeleccionadas;
   int cantidadDeCanciones;
   const char *cancionAleatoria;
@@ -260,6 +243,10 @@ int calcularEspaciosExtra(int largoCadena, int ancho)
       cancionesSeleccionadas = cancionesCampeon;
       cantidadDeCanciones = sizeof(cancionesCampeon) / sizeof(cancionesCampeon[0]);
       break;
+    case 10:
+      cancionesSeleccionadas = cancionLowHP;
+      cantidadDeCanciones = sizeof(cancionLowHP) / sizeof(cancionLowHP[0]);
+      break;
     }
 
     int indiceAleatorio = rand() % cantidadDeCanciones;
@@ -267,4 +254,4 @@ int calcularEspaciosExtra(int largoCadena, int ancho)
     if (loop) PlaySound(TEXT(cancionAleatoria), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
     else PlaySound(TEXT(cancionAleatoria), NULL, SND_FILENAME | SND_ASYNC);
 }
-*/
+

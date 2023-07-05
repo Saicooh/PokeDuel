@@ -15,4 +15,6 @@ void escribirLentamente(char *texto, int saltosLinea);
 
 int calcularEspaciosExtra(int largoCadena, int ancho);
 
+void playSongType(int type, int loop, int numLiga, int stop);
+
 #endif /* funciones_h */
