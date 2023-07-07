@@ -1,6 +1,7 @@
 #ifndef main_h
 #define main_h
 
+
 #include <stdio.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,6 +16,9 @@
 #include "hashmap.h"
 #include "funciones.h"
 #include "importar.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_timer.h>
 
 #define MAX 25
 

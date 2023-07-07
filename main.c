@@ -1,6 +1,8 @@
 #include "main.h"
 #include <windows.h>
 
+#undef main
+
 void mostrarPokedex(HashMap *Pokedex)
 {
   Pair *aux = firstMap(Pokedex);
@@ -474,9 +476,13 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
   puts("");
   escribirLentamente("La batalla comienza ahora!!",3);
   sleep(1);
-  printf("%s envio a %s\n\n",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
+
+  sprintf(cadenaCompleta, "%s envio a %s",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
+  escribirLentamente(cadenaCompleta, 2);
   sleep(1);
-  printf("Ve! %s!\n\n", entrenadores[0].equipo[0].nombre);
+
+  sprintf(cadenaCompleta, "Ve %s!", entrenadores[0].equipo[0].nombre);
+  escribirLentamente(cadenaCompleta, 2);
   sleep(1);
   
   bool first = true;
@@ -577,10 +583,14 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
             entrenadores[entrenadorPos].equipo[i] = aux;
   
             char cambiarPokemon[MAX];
-      
-            printf("%s va a utilizar a %s ...\n\n",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
-            printf("%s, quieres cambiar de Pokemon? (s/n)\n", entrenadores[0].nombre);
-  
+
+            sprintf(cadenaCompleta, "%s va a utilizar a %s ...\n\n",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
+            escribirLentamente(cadenaCompleta, 2);
+            sleep(1);
+
+            sprintf(cadenaCompleta, "%s, quieres cambiar de Pokemon? (s/n)", entrenadores[0].nombre);
+            escribirLentamente(cadenaCompleta, 1);
+
             scanf("%s", cambiarPokemon);
             getchar();
             
@@ -590,12 +600,19 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
               entrenadores[0].equipo[0].ataque = entrenadores[0].equipo[0].ataqueBase;
               entrenadores[0].equipo[0].defensa = entrenadores[0].equipo[0].defensaBase;
               cambiarPBatalla(entrenadores);
-              printf("%s vuelve\n\n", auxNombre);
-              printf("Ve %s!\n", entrenadores[0].equipo[0].nombre);
+
+              sprintf(cadenaCompleta, "%s vuelve", auxNombre);
+              escribirLentamente(cadenaCompleta, 2);
+              usleep(500000);
+
+              sprintf(cadenaCompleta, "Ve %s!", entrenadores[0].equipo[0].nombre);
+              escribirLentamente(cadenaCompleta, 2);
+              usleep(500000);
             }
-  
-            printf("\n%s envio a %s!\n\n",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
             
+            puts("");
+            sprintf(cadenaCompleta, "%s envio a %s",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
+            escribirLentamente(cadenaCompleta, 2);
             break;
           }
         }
@@ -774,7 +791,7 @@ void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimient
   return;
 }
 
-int main()
+int SDL_main(int argc, char *argv[])
 {
 /*
                       ____ _             _           _             
@@ -792,6 +809,8 @@ int main()
                                       (____/                      
 */
 
+  //cargarMusica();
+  
   srand(time(NULL));
   playSongType(1,1,0,0);
   
@@ -870,6 +889,8 @@ int main()
         exit(EXIT_SUCCESS);
     }
   }
-  
+
+  SDL_Quit();
+
   return 0;
 }
