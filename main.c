@@ -1,8 +1,6 @@
 #include "main.h"
 #include <windows.h>
 
-#undef main
-
 void mostrarPokedex(HashMap *Pokedex)
 {
   Pair *aux = firstMap(Pokedex);
@@ -357,7 +355,6 @@ void agregarObjeto(HashMap *Objetos ,Entrenador entrenadores[])
     return agregarObjeto(Objetos,entrenadores);
   }
   
-  
   puts("\nIngrese la cantidad que quiere agregar (Max 99):");
   scanf("%d", &cantidad);
 
@@ -442,7 +439,7 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
 
   if(entrenadorPos == 1)
   {
-    playSongType(8,0,0,0);
+    playSongType(8,0,0,1);
     puts("");
     escribirLentamente("BIENVENIDO AL MODO ENTRENAMIENTO!!", 2);
     sleep(2);
@@ -469,7 +466,7 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
 
  if(entrenadorPos == 1) 
   {
-    playSongType(2,1,0,0);
+    playSongType(2,1,0,1);
     printf("\033[2J\033[H");
   }
   
@@ -517,7 +514,7 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
           escribirLentamente("Has huido de la batalla ...", 2); 
           sleep(2);
           reiniciar(entrenadores);
-          playSongType(1,1,0,0);
+          playSongType(1,1,0,1);
           return;
       }
     }
@@ -611,7 +608,7 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
             }
             
             puts("");
-            sprintf(cadenaCompleta, "%s envio a %s",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
+            sprintf(cadenaCompleta, "%s envio a %s", entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
             escribirLentamente(cadenaCompleta, 2);
             break;
           }
@@ -652,25 +649,25 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
     
     if(*ganador == 1)
     {
-      playSongType(5,0,0,0);
+      playSongType(5,0,0,1);
       escribirLentamente("Felicidades has derrotado a la Entrenadora Jessica!!", 2);
       sleep(4);
       system("clear");
-      playSongType(1,1,0,0);
+      playSongType(1,1,0,1);
       return;
     }
     else
     {
       sleep(1);
       
-      sprintf(cadenaCompleta, "%s se ha quedado sin Pokemon disponibles!", entrenadores[entrenadorPos].nombre);
+      sprintf(cadenaCompleta, "%s se ha quedado sin Pokemon disponibles!", entrenadores[0].nombre);
       escribirLentamente(cadenaCompleta, 2);
 
       sleep(2);
       escribirLentamente("Has perdido ...", 1);
 
       sleep(2);
-      playSongType(1,1,0,0);
+      playSongType(1,1,0,1);
       return;
     }
   }
@@ -682,7 +679,7 @@ void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimient
   
   printf("\033[2J\033[H");
 
-  playSongType(3,0,0,0);
+  playSongType(3,0,0,1);
 
   escribirLentamente("BIENVENIDO A LA LIGA POKEMON!!", 2);
   sleep(2);
@@ -721,13 +718,13 @@ void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimient
       escribirLentamente("Pero no te dejare ganar tan facilmente ............", 2);
       sleep(2);
       
-      playSongType(9,1,0,0);
+      playSongType(9,1,0,1);
       printf("\033[2J\033[H");
       sleep(1);
     }
     else
     {
-      playSongType(4,1,entrenadorPos-2,0);
+      playSongType(4,1,entrenadorPos-2,1);
       puts("");
       sprintf(cadenaCompleta, "Te enfrentaras contra %s!",entrenadores[entrenadorPos].nombre);
       escribirLentamente(cadenaCompleta, 1);
@@ -748,14 +745,14 @@ void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimient
         escribirLentamente("Has perdido ...", 1);
         sleep(2);
 
-        playSongType(1,1,0,0);
+        playSongType(1,1,0,1);
         system("cls");
         return;
       }
       else
       {
-        if(entrenadorPos == 6) playSongType(6,0,0,0);
-        else playSongType(5,0,0,0);
+        if(entrenadorPos == 6) playSongType(6,0,0,1);
+        else playSongType(5,0,0,1);
         sprintf(cadenaCompleta, "Has derrotado a %s!!", entrenadores[entrenadorPos].nombre);
         escribirLentamente(cadenaCompleta, 2);
         sleep(4);
@@ -791,7 +788,7 @@ void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimient
   return;
 }
 
-int SDL_main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 /*
                       ____ _             _           _             
@@ -809,15 +806,15 @@ int SDL_main(int argc, char *argv[])
                                       (____/                      
 */
 
-  //cargarMusica();
-  
   srand(time(NULL));
-  playSongType(1,1,0,0);
-  
+
+  playSongType(1,1,0,1);
+  playSongType(10,0,0,0);
   char trainer_username[MAX];
   
   escribirLentamente("Bienvenido al simulador de combates de Pokemon Pokeduel!", 2);
-  
+  sleep(1);
+
   escribirLentamente("Ingresa tu nombre de entrenador!", 1);
   
   scanf("%s", trainer_username);
@@ -881,7 +878,7 @@ int SDL_main(int argc, char *argv[])
       case 5 :
         ligaPokemon(entrenadores, Pokedex, Movimientos, Multiplicadores, Objetos, &ganador);
         validar(&user_continue);
-        playSongType(1,1,0,0);
+        playSongType(1,1,0,1);
         break;
 
       case 6 : 
