@@ -43,14 +43,8 @@ O puedes simplemente ejecutar el archivo PokeDuel.exe incluido.
 Después de compilar el proyecto, puedes ejecutar el simulador usando el comando:
 
 ```
-./pokemon_battle_simulator
+./PokeDuel
 ```
-
-## Antes de jugar
-
-Este simulador posee archivos de audio, para poder escucharlos, debes "descomentar" todas las líneas de código que sean ```playSound()``` en el ```main.c``` y también "descomentar" la función llamada ```playSoundType()``` del archivo ```funciones.c```
-
-Además debes incluir la [música](https://drive.google.com/drive/u/0/folders/1IqZd91lmiJQnD2M6gaNWJ4-1t1HiqUGu) en la carpeta descargada, si es que no lo está.
 
 ## Precauciones al usar el programa.
 
