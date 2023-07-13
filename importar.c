@@ -2,7 +2,7 @@
 
 void cargarPokedex(HashMap *Pokedex, HashMap *Movimientos)
 {
-  FILE *fp = fopen("pokemon_pokedex.csv", "r");
+  FILE *fp = fopen("csv\\pokemon_pokedex.csv", "r");
 
   char linea[1024];
   char *cont;
@@ -55,7 +55,7 @@ void cargarPokedex(HashMap *Pokedex, HashMap *Movimientos)
 
 void cargarObjetos(HashMap *Objetos)
 {
-  FILE *fp = fopen("pokemon_objetos.csv", "r");
+  FILE *fp = fopen("csv\\pokemon_objetos.csv", "r");
 
   char linea[1024];
   int i;
@@ -89,7 +89,7 @@ void cargarObjetos(HashMap *Objetos)
 
 void cargarMovimientos(HashMap *Movimientos)
 {
-  FILE *fp = fopen("pokemon_movimientos.csv", "r");
+  FILE *fp = fopen("csv\\pokemon_movimientos.csv", "r");
 
   char linea[1024];
   int i;
@@ -123,7 +123,7 @@ void cargarMovimientos(HashMap *Movimientos)
 
 void cargarMultiplicadores(HashMap *multiplicadores)
 {
-  FILE *fp = fopen("pokemon_multiplicadores.csv", "r");
+  FILE *fp = fopen("csv\\pokemon_multiplicadores.csv", "r");
 
   char linea[1024];
   int i;
@@ -157,7 +157,7 @@ void cargarMultiplicadores(HashMap *multiplicadores)
 
 void cargarEntrenadoresLiga(Entrenador entrenadores[], HashMap *Pokedex)
 {
-  FILE *fp = fopen("pokemon_entrenadores_liga.csv", "r");
+  FILE *fp = fopen("csv\\pokemon_entrenadores_liga.csv", "r");
 
   char linea[1024];
   fgets(linea, 1023, fp);

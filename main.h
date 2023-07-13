@@ -38,6 +38,7 @@ void verEquipoActual(Entrenador entrenadores[]);
 //
 void administrarObjetos(HashMap *Objetos, Entrenador entrenadores[]);
 
+void menuObjeto(int *opcion);
 void mostrarObjetos(HashMap *Objetos);
 void agregarObjeto(HashMap *Objetos ,Entrenador entrenadores[]);
 void mostrarMochila(Entrenador entrenadores[]);
@@ -49,7 +50,6 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
 
 void mostrarEquipoEnemigo(Entrenador entrenadores[], HashMap *Pokedex);
 void atacar(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores, int *danio, int posicion, int *vivo, int *ganador);
-void info(Entrenador entrenadores[], bool first, int danio, int posicion);
 void cambiarPokemon(char *auxNombre, Entrenador entrenadores[]);
 //
 

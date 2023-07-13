@@ -1,5 +1,6 @@
 #ifndef combates_h
 #define combates_h
+
 #include "structs.h"
 
 int calculoDano(HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores, Pokemon *PokeAtaca, Pokemon *PokeRecibe, Ataque ataque);
@@ -10,7 +11,9 @@ void atacar(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, H
 
 void reiniciar(Entrenador entrenadores[]);
 
-void info(Entrenador entrenadores[], bool first, int danio, int posicion);
+void infoEntrenador(Entrenador entrenadores[], int posicion);
+
+void menuPelea();
 
 int compararEficiencia(const void *a, const void *b);
 

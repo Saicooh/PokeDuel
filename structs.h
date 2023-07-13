@@ -82,5 +82,37 @@ typedef struct
 
 } AtkEfc;
 
+typedef struct 
+{
+  char **canciones;
+  int cantidad;
+} ListaDeCanciones;
+
+enum Sonido
+{
+  MENU = 1,
+  BATALLA = 2,
+  ANTES_LIGA = 3,
+  LIGA = 4,
+  VICTORIA = 5,
+  VICTORIA_LIGA = 6,
+  ANTES_CAMPEON = 7,
+  ANTES_ENTRENAMIENTO = 8,
+  CAMPEON = 9,
+
+  LOW_HP = 10,
+  DEBIL = 11,
+  DEBIL2 = 12,
+  NORMAL = 13,
+  MUY_EFICAZ = 14,
+  SUPEREFECTIVO = 15,
+
+  PARALIZADO = 16,
+  QUEMADO = 17,
+  CONGELADO = 18,
+  DORMIDO = 19,
+  ENVENENADO = 20,
+  CONFUNDIDO = 21,
+};
 
 #endif

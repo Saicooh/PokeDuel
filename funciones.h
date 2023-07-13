@@ -15,6 +15,12 @@ void escribirLentamente(char *texto, int saltosLinea);
 
 int calcularEspaciosExtra(int largoCadena, int ancho);
 
+void iniciarSDL();
+
+void reproducirMusica(const char *cancion, int loop);
+
+void playSoundEffect(const char *path, int loop, int volume);
+
 void playSongType(int type, int loop, int numLiga, int stop);
 
 #endif /* funciones_h */

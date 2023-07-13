@@ -158,27 +158,54 @@ int calcularEspaciosExtra(int largoCadena, int ancho)
   return (ancho - largoCadena) / 2;
 }
 
-void playSongType(int type, int loop, int numLiga, int stop)
+void iniciarSDL()
 {
-  if (stop) Mix_HaltMusic();
-
-  int result = 0;
-  int flags = MIX_INIT_MP3;
-
   if (SDL_Init(SDL_INIT_AUDIO) < 0) 
   {
     printf("Failed to init SDL\n");
     exit(1);
   }
 
-  if (flags != (result = Mix_Init(flags)))
+  int flags = MIX_INIT_MP3;
+  if (flags != Mix_Init(flags))
   {
-    printf("Could not initialize mixer (result: %d).\n", result);
+    printf("Could not initialize mixer (result: %d).\n", Mix_Init(flags));
     printf("Mix_Init: %s\n", Mix_GetError());
     exit(1);
   }
 
-  char *cancionesMenu[] =
+  Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
+}
+
+void limpiarConsola()
+{
+  system("cls||clear");
+  printf("\033[2J\033[H");
+}
+
+void reproducirMusica(const char *cancion, int loop) 
+{
+  Mix_Music *music = Mix_LoadMUS(cancion);
+  Mix_VolumeMusic(25);
+  if (loop) Mix_PlayMusic(music, -1);
+  else Mix_PlayMusic(music, 0);
+}
+
+void playSoundEffect(const char *path, int loop, int volume)
+{
+  Mix_Chunk *soundEffect = Mix_LoadWAV(path);
+
+  if (loop == 1) loop = -1;
+  else loop = 0;
+
+  int channel = Mix_PlayChannel(-1, soundEffect, loop);
+
+  Mix_Volume(channel, volume);
+}
+
+void playSongType(int type, int loop, int numLiga, int stop)
+{
+  static char *cancionesMenu[] = 
   {
     "musiquita\\menu1.mp3",
     "musiquita\\menu2.mp3",
@@ -186,9 +213,11 @@ void playSongType(int type, int loop, int numLiga, int stop)
     "musiquita\\menu4.mp3",
     "musiquita\\menu5.mp3",
     "musiquita\\menu6.mp3",
-  }; // 1
+  };
 
-  char *cancionesBatalla[] =
+  static ListaDeCanciones listaCancionesMenu = {.canciones = cancionesMenu, .cantidad = sizeof(cancionesMenu) / sizeof(cancionesMenu[0])};
+
+  static char *cancionesBatalla[] =
   {
     "musiquita\\batalla1.mp3",
     "musiquita\\batalla2.mp3",
@@ -196,14 +225,18 @@ void playSongType(int type, int loop, int numLiga, int stop)
     "musiquita\\batalla4.mp3",
   }; // 2
 
-  char *cancionesAntesLiga[] =
+  static ListaDeCanciones listaCancionesBatalla = {.canciones = cancionesBatalla, .cantidad = sizeof(cancionesBatalla) / sizeof(cancionesBatalla[0])};
+
+  static char *cancionesAntesLiga[] =
   {
     "musiquita\\road.mp3",
     "musiquita\\road2.mp3",
     "musiquita\\road3.mp3",
   }; // 3
 
-  char *cancionesLiga[] =
+  static ListaDeCanciones listaCancionesAntesLiga = {.canciones = cancionesAntesLiga, .cantidad = sizeof(cancionesAntesLiga) / sizeof(cancionesAntesLiga[0])};
+
+  static char *cancionesLiga[] =
   {
     "musiquita\\liga1.mp3",
     "musiquita\\liga2.mp3",
@@ -211,36 +244,53 @@ void playSongType(int type, int loop, int numLiga, int stop)
     "musiquita\\liga4.mp3",
   }; // 4
   
-  char *cancionesVictoriaNormal[] =
+  static ListaDeCanciones listaCancionesLiga = {.canciones = cancionesLiga, .cantidad = sizeof(cancionesLiga) / sizeof(cancionesLiga[0])};
+
+  static char *cancionesVictoriaNormal[] =
   {
     "musiquita\\victoria.mp3",
   }; // 5
 
-  char *cancionesVictoriaLiga[] =
+  static ListaDeCanciones listaCancionesVictoriaNormal = {.canciones = cancionesVictoriaNormal, .cantidad = sizeof(cancionesVictoriaNormal) / sizeof(cancionesVictoriaNormal[0])};
+  
+  static char *cancionesVictoriaLiga[] =
   {
     "musiquita\\victoriaLiga.mp3",
   }; //6
 
-  char *cancionAntesCampeon[] =
+  static ListaDeCanciones listaCancionesVictoriaLiga = {.canciones = cancionesVictoriaLiga, .cantidad = sizeof(cancionesVictoriaLiga) / sizeof(cancionesVictoriaLiga[0])};
+
+  static char *cancionAntesCampeon[] =
   {
     "musiquita\\antescampeon1.mp3",
     "musiquita\\antescampeon2.mp3",
   }; // 7
 
-  char *cancionesAntesEntrenamiento[] =
+  static ListaDeCanciones listaCancionAntesCampeon = {.canciones = cancionAntesCampeon, .cantidad = sizeof(cancionAntesCampeon) / sizeof(cancionAntesCampeon[0])};
+
+  static char *cancionesAntesEntrenamiento[] =
   {
-    "musiquita\\pre_entrenamiento.mp3",
+    "musiquita\\pre_entrenamiento.wav",
   }; // 8
 
-  char *cancionesCampeon[] =
+  static ListaDeCanciones listaCancionesAntesEntrenamiento = {.canciones = cancionesAntesEntrenamiento, .cantidad = sizeof(cancionesAntesEntrenamiento) / sizeof(cancionesAntesEntrenamiento[0])};
+
+  static char *cancionesCampeon[] =
   {
     "musiquita\\araya.mp3",
+    "musiquita\\campeon2.mp3"
   }; // 9
 
-  char *cancionLowHP[] =
+  static ListaDeCanciones listaCancionesCampeon = {.canciones = cancionesCampeon, .cantidad = sizeof(cancionesCampeon) / sizeof(cancionesCampeon[0])};
+
+  static char *cancionLowHP[] =
   {
     "musiquita\\lowhp.mp3",
   }; // 10
+
+  static ListaDeCanciones listaCancionLowHP = {.canciones = cancionLowHP, .cantidad = sizeof(cancionLowHP) / sizeof(cancionLowHP[0])};
+
+  ListaDeCanciones *listaSeleccionada = NULL;
 
   char **cancionesSeleccionadas;
   int cantidadDeCanciones;
@@ -249,68 +299,41 @@ void playSongType(int type, int loop, int numLiga, int stop)
 
   switch (type) 
   {
-    case 1:
-      cancionesSeleccionadas = cancionesMenu;
-      cantidadDeCanciones = sizeof(cancionesMenu) / sizeof(cancionesMenu[0]);
-      break;
-    case 2:
-      cancionesSeleccionadas = cancionesBatalla;
-      cantidadDeCanciones = sizeof(cancionesBatalla) / sizeof(cancionesBatalla[0]);
-      break;
-    case 3:
-      cancionesSeleccionadas = cancionesAntesLiga;
-      cantidadDeCanciones = sizeof(cancionesAntesLiga) / sizeof(cancionesAntesLiga[0]);
-      break;
+    case 1: listaSeleccionada = &listaCancionesMenu; break;
+    case 2: listaSeleccionada = &listaCancionesBatalla; break;
+    case 3: listaSeleccionada = &listaCancionesAntesLiga; break;
     case 4:
-      cancionesSeleccionadas = cancionesLiga;
-      cancionAleatoria = cancionesSeleccionadas[numLiga];
 
-      Mix_Music *music = Mix_LoadMUS(cancionAleatoria);
-      Mix_VolumeMusic(25);
-
-      if (loop) Mix_PlayMusic(music, -1);
-      else Mix_PlayMusic(music, 0);
-      
+      listaSeleccionada = &listaCancionesLiga;
+      const char *cancionAleatoria = listaSeleccionada->canciones[numLiga];
+      reproducirMusica(cancionAleatoria, loop);
       return;
 
-    case 5:
-      cancionesSeleccionadas = cancionesVictoriaNormal;
-      cantidadDeCanciones = sizeof(cancionesVictoriaNormal) / sizeof(cancionesVictoriaNormal[0]);
-      break;
-    case 6:
-      cancionesSeleccionadas = cancionesVictoriaLiga;
-      cantidadDeCanciones = sizeof(cancionesVictoriaLiga) / sizeof(cancionesVictoriaLiga[0]);
-      break;
-    case 7:
-      cancionesSeleccionadas = cancionAntesCampeon;
-      cantidadDeCanciones = sizeof(cancionAntesCampeon) / sizeof(cancionAntesCampeon[0]);
-      break;
-    case 8:
-      cancionesSeleccionadas = cancionesAntesEntrenamiento;
-      cantidadDeCanciones = sizeof(cancionesAntesEntrenamiento) / sizeof(cancionesAntesEntrenamiento[0]);
-      break;
-    case 9:
-      cancionesSeleccionadas = cancionesCampeon;
-      cantidadDeCanciones = sizeof(cancionesCampeon) / sizeof(cancionesCampeon[0]);
-      break;
-    case 10:
-      cancionesSeleccionadas = cancionLowHP;
-      cantidadDeCanciones = sizeof(cancionLowHP) / sizeof(cancionLowHP[0]);
+    case 5: listaSeleccionada = &listaCancionesVictoriaNormal; break;
+    case 6: listaSeleccionada = &listaCancionesVictoriaLiga; break;
+    case 7: listaSeleccionada = &listaCancionAntesCampeon; break;
+    case 8: listaSeleccionada = &listaCancionesAntesEntrenamiento; break;
+    case 9: listaSeleccionada = &listaCancionesCampeon; break;
 
-      Mix_Chunk *lowHealthBeep = Mix_LoadWAV("musiquita\\lowhp.wav");
-      int channel = Mix_PlayChannel(-1, lowHealthBeep, -1);
-      Mix_Volume(channel, 25);
-      break;
-    }
+    case 10: playSoundEffect("musiquita\\lowhp.mp3", loop, 25); return;
+    case 11: playSoundEffect("musiquita\\debil.mp3", loop, 25); return;
+    case 12: playSoundEffect("musiquita\\debil2.mp3", loop, 25); return;
+    case 13: playSoundEffect("musiquita\\normal.mp3", loop, 25); return;
+    case 14: playSoundEffect("musiquita\\muy_eficaz.mp3", loop, 25); return;
+    case 15: playSoundEffect("musiquita\\superefectivo.mp3", loop, 25); return;
 
-  int indiceAleatorio = rand() % cantidadDeCanciones;
-  cancionAleatoria = cancionesSeleccionadas[indiceAleatorio];
+    case 16: playSoundEffect("musiquita\\paralizado.mp3", loop, 25); return;
+    case 17: playSoundEffect("musiquita\\quemado.mp3", loop, 25); return;
+    case 18: playSoundEffect("musiquita\\congelado.mp3", loop, 25); return;
+    case 19: playSoundEffect("musiquita\\dormido.mp3", loop, 25); return;
+    case 20: playSoundEffect("musiquita\\envenenado.mp3", loop, 25); return;
+    case 21: playSoundEffect("musiquita\\confundido.mp3", loop, 25); return;
+  }
+
+  int indiceAleatorio = rand() % listaSeleccionada -> cantidad;
+  cancionAleatoria = listaSeleccionada -> canciones[indiceAleatorio];
 
   printf("Cancion aleatoria: %s\n", cancionAleatoria);
 
-  Mix_Music *music = Mix_LoadMUS(cancionAleatoria);
-  Mix_VolumeMusic(25);
-
-  if (loop) Mix_PlayMusic(music, -1);
-  else Mix_PlayMusic(music, 0);
+  reproducirMusica(cancionAleatoria, loop);
 }
