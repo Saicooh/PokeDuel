@@ -1,5 +1,4 @@
 #include "main.h"
-#include <windows.h>
 
 void mostrarPokedex(HashMap *Pokedex)
 {
@@ -335,7 +334,7 @@ void eliminarObjeto(Entrenador entrenadores[])
 
 }
 
-void agregarObjeto(HashMap *Objetos ,Entrenador entrenadores[])
+void agregarObjeto(HashMap *Objetos, Entrenador entrenadores[])
 {
   char item[3];
   int indice;
@@ -349,17 +348,16 @@ void agregarObjeto(HashMap *Objetos ,Entrenador entrenadores[])
 
   //Se realiza una verificacion de que el item sea valido.
 
-  if(indice <= 0 || indice >13)
+  if(indice <= 0 || indice > 13)
   {
-    printf("\nIngrese un Item Valido\n");
-    return agregarObjeto(Objetos,entrenadores);
+    printf("\nIngrese un Item valido\n");
+    return agregarObjeto(Objetos, entrenadores);
   }
   
   puts("\nIngrese la cantidad que quiere agregar (Max 99):");
   scanf("%d", &cantidad);
 
-  sprintf(item,"%i",indice);
-  
+  sprintf(item, "%i", indice);
   
   // Aca realizamos Una verificacion sobre que la cantidad sea una cantidad valida
   while (cantidad < 0 || cantidad > 99)
@@ -369,45 +367,45 @@ void agregarObjeto(HashMap *Objetos ,Entrenador entrenadores[])
   }
 
   //Aca pasamos todos los datos del Item del mapa de Objetos a la mochila del usuario.
-  entrenadores[0].mochila = realloc(entrenadores[0].mochila, (entrenadores[0].cantidadObj + 1) *   sizeof(Objeto));
+  entrenadores[0].mochila = realloc(entrenadores[0].mochila, (entrenadores[0].cantidadObj + 1) * sizeof(Objeto));
 
   Pair *objetoPair = searchMap(Objetos,item);
-
   Objeto *auxObjeto = malloc(sizeof(Objeto));
-  
   Objeto *auxObjetoOriginal = objetoPair->value;
 
   *auxObjeto = *auxObjetoOriginal;
-    
   auxObjeto -> cantidad = cantidad;
     
   entrenadores[0].mochila[entrenadores[0].cantidadObj] = *auxObjeto;
   entrenadores[0].cantidadObj++;
 }
 
+void menuObjeto(int *opcion)
+{
+  puts("\nQue deseas realizar?\n");
+  puts("1. Ver todos los objetos disponibles.");
+  usleep(250000);
+  puts("2. Agregar un objeto a tu mochila.");
+  usleep(250000);
+  puts("3. Ver tus objetos.");
+  usleep(250000);
+  puts("4. Eliminar un objeto de la mochila.");
+  usleep(250000);
+  puts("5. Volver al menu.\n");
+
+  scanf("%d", &opcion);
+  getchar();
+}
+
 void administrarObjetos(HashMap *Objetos, Entrenador entrenadores[])
 {
   printf("\033[2J\033[H");
-  
+
   int opcion;
- // se le pide al usuario ingresar una opcion del menu
+  
   while (1)
   {
-    puts("\nQue deseas realizar?\n");
-    puts("1. Ver todos los objetos disponibles.");
-    usleep(250000);
-    puts("2. Agregar un objeto a tu mochila.");
-    usleep(250000);
-    puts("3. Ver tus objetos.");
-    usleep(250000);
-    puts("4. Eliminar un objeto de la mochila.");
-    usleep(250000);
-    puts("5. Volver al menu.\n");
-
-    scanf("%d", &opcion);
-    getchar();
-
-    // dependiendo de la opcion que le alla seleccionado el usuario lo llevara a una de las cuatro funciones.
+    menuObjeto(&opcion);
     switch (opcion)
     {
       case 1 : mostrarObjetos(Objetos); break;
@@ -425,12 +423,9 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
   char cadenaCompleta[1000];
   srand(time(NULL));
   
-  int danio;
+  int danio = 0;
 
-  if(entrenadorPos == 1)
-  {
-    printf("\033[2J\033[H");
-  }
+  if(entrenadorPos == 1) printf("\033[2J\033[H");
   
   char auxNombre[MAX];
   int dificultad;
@@ -472,7 +467,9 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
   
   puts("");
   escribirLentamente("La batalla comienza ahora!!",3);
-  sleep(1);
+  sleep(2);
+
+  printf("\033[2J\033[H");
 
   sprintf(cadenaCompleta, "%s envio a %s",entrenadores[entrenadorPos].nombre, entrenadores[entrenadorPos].equipo[0].nombre);
   escribirLentamente(cadenaCompleta, 2);
@@ -488,8 +485,11 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
   {
     if(entrenadores[0].equipo[0].muerto == true || entrenadores[entrenadorPos].equipo[0].muerto == true) break;
 
-    info(entrenadores, first, danio, entrenadorPos);
-    
+    infoEntrenador(entrenadores, 0);
+    infoEntrenador(entrenadores, entrenadorPos);
+
+    menuPelea();
+
     int opcionMenuBatalla;
     
     scanf("%d", &opcionMenuBatalla);
@@ -523,7 +523,7 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
       while(opcionMenuBatalla == 4)
       {
         escribirLentamente("No puedes huir.",2);
-        info(entrenadores, first, danio, entrenadorPos);
+        infoEntrenador(entrenadores, entrenadorPos);
         scanf("%d", &opcionMenuBatalla);
         puts("");
       }
@@ -559,8 +559,8 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
     { 
       if(entrenadores[entrenadorPos].equipo[5].muerto == false) 
       {
-          sprintf(cadenaCompleta,"%s se desmayo!", entrenadores[entrenadorPos].equipo[0].nombre);
-          escribirLentamente(cadenaCompleta, 2);
+        sprintf(cadenaCompleta,"%s se desmayo!", entrenadores[entrenadorPos].equipo[0].nombre);
+        escribirLentamente(cadenaCompleta, 2);
       }
       
       entrenadores[entrenadorPos].equipo[0].saludActual = 0;
@@ -617,7 +617,15 @@ void entrenamientoPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *
     }
     
     entrenadores[0].equipo[0].saludActual -= danio;
+
+    contadorBajando2(entrenadores, entrenadores[0].equipo[0].saludActual, danio, 0);
     
+    float health_percent = ((float) entrenadores[0].equipo[0].saludActual / entrenadores[0].equipo[0].salud) * 100;
+
+    printf("Porcentaje de vida restante : %.2f%%\n\n", health_percent);
+  
+    if (health_percent <= 25 && health_percent > 0 && Mix_Playing(0) == 0) playSongType(10,0,0,0);
+
     if(vivo == 0) vivo = 1;
     
     if(entrenadores[0].equipo[0].saludActual <= 0)
@@ -701,7 +709,7 @@ void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimient
     
     if (entrenadorPos == 6)
     {
-      playSongType(7,0,0,0);
+      playSongType(7,0,0,1);
 
       sleep(1);
 
@@ -737,7 +745,7 @@ void ligaPokemon(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimient
       if(ganador == 0)
       {
         sleep(2);
-        sprintf(cadenaCompleta, "%s se ha quedado sin Pokemon disponibles!", entrenadores[entrenadorPos].nombre);
+        sprintf(cadenaCompleta, "%s se ha quedado sin Pokemon disponibles!", entrenadores[0].nombre);
 
         escribirLentamente(cadenaCompleta, 2);
         sleep(2);
@@ -808,10 +816,12 @@ int main(int argc, char *argv[])
 
   srand(time(NULL));
 
-  playSongType(1,1,0,1);
-  playSongType(10,0,0,0);
+  iniciarSDL();
+  
   char trainer_username[MAX];
   
+  playSongType(1,1,0,1);
+
   escribirLentamente("Bienvenido al simulador de combates de Pokemon Pokeduel!", 2);
   sleep(1);
 

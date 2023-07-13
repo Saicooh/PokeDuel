@@ -116,11 +116,31 @@ int calculoDano(HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores
     
     if (crit == 2) escribirLentamente("GOLPE CRITICO!", 2);
     
-    if (eficiencia == 0.25) escribirLentamente("Muy poco eficaz ...", 2);
-    else if (eficiencia == 0.5) escribirLentamente("Poco eficaz ...", 2);
-    else if (eficiencia == 2.0) escribirLentamente("Es muy eficaz!", 2);
-    else if (eficiencia == 4.0) escribirLentamente("Es super eficaz!", 2);
+    if (eficiencia == 0.25)
+    {
+      escribirLentamente("Muy poco eficaz ...", 2);
+      playSongType(DEBIL,0,0,0);
+    }
 
+    else if (eficiencia == 0.5)
+    {
+      escribirLentamente("Poco eficaz ...", 2);
+      playSongType(DEBIL2,0,0,0);
+    }
+
+    else if (eficiencia == 1.0) playSongType(NORMAL,0,0,0);
+
+    else if (eficiencia == 2.0)
+    {
+      escribirLentamente("Es muy eficaz!", 2);
+      playSongType(MUY_EFICAZ,0,0,0);
+    }
+    
+    else if (eficiencia == 4.0)
+    {
+      escribirLentamente("Es super eficaz!", 2);
+      playSongType(SUPEREFECTIVO,0,0,0);
+    }
     sleep(1);
     
     free(concatAttack);
@@ -203,6 +223,7 @@ void reiniciar(Entrenador entrenadores[])
 
 void cambiarPBatalla(Entrenador entrenadores[])
 {
+  Mix_HaltChannel(0);
   Pokemon auxCambio;
   int opcionCambio;
   
@@ -274,10 +295,14 @@ void atacar(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, H
 
   *danio = calculoDano(Pokedex, Movimientos, Multiplicadores, &entrenadores[0].equipo[0], &entrenadores[posicion].equipo[0], *ataq);
 
-  entrenadores[posicion].equipo[0].saludActual -= *danio; 
+  entrenadores[posicion].equipo[0].saludActual -= *danio;
+
+  contadorBajando2(entrenadores, entrenadores[posicion].equipo[0].saludActual, *danio, posicion);
 
   if(entrenadores[0].equipo[0].saludActual <= 0)
   {
+    Mix_HaltChannel(0);
+    
     entrenadores[0].cantidadVivos--;
     
     sprintf(cadenaCompleta, "%s se desmayo!", entrenadores[0].equipo[0].nombre);
@@ -288,10 +313,7 @@ void atacar(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, H
 
     entrenadores[0].equipo[0].muerto = true;
     
-    if(entrenadores[0].cantidadVivos < 1)
-    {
-      *ganador = 0;
-    }
+    if(entrenadores[0].cantidadVivos < 1) *ganador = 0;
 
     cambiarPBatalla(entrenadores);
   }
@@ -356,7 +378,7 @@ void atacar(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, H
   }
 }
 
-void info(Entrenador entrenadores[], bool first, int danio, int posicion)
+/*void info(Entrenador entrenadores[], bool first, int danio, int posicion)
 {
   char cadenaCompleta[50];
   sprintf(cadenaCompleta, "Tu Pokemon: %s ", entrenadores[0].equipo[0].nombre);
@@ -370,7 +392,6 @@ void info(Entrenador entrenadores[], bool first, int danio, int posicion)
     escribirLentamente(cadenaCompleta, 0);
     sprintf(cadenaCompleta, "(%i/%i) PS - LVL. 100\n\n", entrenadores[posicion].equipo[0].saludActual, entrenadores[posicion].equipo[0].salud);
     escribirLentamente(cadenaCompleta, 0);
-
   }
   else
   {
@@ -381,7 +402,11 @@ void info(Entrenador entrenadores[], bool first, int danio, int posicion)
       printf("(%i/%i) PS - LVL. 100\n\n", entrenadores[posicion].equipo[0].saludActual, entrenadores[posicion].equipo[0].salud);
     }
   }
-  
+}
+*/
+
+void menuPelea()
+{
   printf("Elija una opcion:\n\n");
   
   printf("1. Atacar\n");
@@ -390,56 +415,56 @@ void info(Entrenador entrenadores[], bool first, int danio, int posicion)
   printf("4. Huir\n\n");
 }
 
+void infoEntrenador(Entrenador entrenadores[], int posicion)
+{
+  char cadenaCompleta[50];
+
+  if (posicion == 0) sprintf(cadenaCompleta, "Tu Pokemon: %s ", entrenadores[0].equipo[0].nombre);
+  else sprintf(cadenaCompleta, "Pokemon Enemigo: %s ", entrenadores[posicion].equipo[0].nombre);
+  escribirLentamente(cadenaCompleta, 0);
+
+  sprintf(cadenaCompleta, "(%i/%i) PS - LVL. 100\n\n", entrenadores[posicion].equipo[0].saludActual, entrenadores[posicion].equipo[0].salud);
+  escribirLentamente(cadenaCompleta, 0);
+}
+
 int compararEficiencia(const void *a, const void *b)
 {
-  const AtkEfc *atkEfcA = (const AtkEfc *)a;
-  const AtkEfc *atkEfcB = (const AtkEfc *)b;
+  const AtkEfc *atkEfcA = (const AtkEfc *) a;
+  const AtkEfc *atkEfcB = (const AtkEfc *) b;
 
-  if (atkEfcA->efc > atkEfcB->efc) return -1;
-  else if (atkEfcA->efc < atkEfcB -> efc) return 1;
+  if (atkEfcA -> efc > atkEfcB -> efc) return -1;
+  else if (atkEfcA -> efc < atkEfcB -> efc) return 1;
   else 
   {
-    // Si la eficiencia es igual, ordenar por potencia en orden descendente
-    
     if (atkEfcA->atk.potencia > atkEfcB->atk.potencia) return -1;
     else if (atkEfcA->atk.potencia < atkEfcB->atk.potencia) return 1;
     else return 0;
   }
-}
+} // Si la eficiencia es igual, ordenar por potencia en orden descendente
 
-void contadorBajando(Entrenador entrenadores[], int vidaActual, int danio, int entrenadorPos)
+void contadorBajando2(Entrenador entrenadores[], int vidaActual, int danio, int entrenadorPos)
 {
+  int posicion = entrenadorPos == 0 ? 1 : 0;
+
+  const char *nombrePokemon = posicion == 1 ? "Tu Pokemon" : "Pokemon Enemigo";
+  
   int decremento = 1;
-
   int vidaEmpezar = entrenadores[entrenadorPos].equipo[0].saludActual + danio;
-
-  printf("Pokemon Enemigo: %s ", entrenadores[entrenadorPos].equipo[0].nombre);
-  printf("(");
 
   for (int i = vidaEmpezar ; i >= entrenadores[entrenadorPos].equipo[0].saludActual; i--)
   {
-    printf("%d", i);
+    int n = printf("\r%s: %s (%d/%d) PS - LVL. 100", nombrePokemon, entrenadores[entrenadorPos].equipo[0].nombre, i, entrenadores[entrenadorPos].equipo[0].salud);
     fflush(stdout);
 
-    usleep(25000); // Agrega un retraso para generar el efecto deseado
+    usleep(25000);
 
-    int num_digits = 0; // Calcula el número de digitos del número actual
-    int temp = i;
-    while (temp != 0)
-    {
-      temp /= 10;
-      num_digits++;
-    }
-    // Borrar número anterior agregando espacios y caracteres de retroceso
-    int j;
+    for (int j = 0; j < n; ++j) printf("\b");
 
-    for (j = 0; j < num_digits; j++) 
-    {
-      printf("\b \b");
-    }
+    if (i == 0) break;
   }
-  
-  printf("%d/%d) PS - LVL. 100\n\n",entrenadores[entrenadorPos].equipo[0].saludActual, entrenadores[entrenadorPos].equipo[0].salud);
+
+  printf("\n\n");
+  fflush(stdout);
 }
 
 int dificultadNormal(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movimientos, HashMap *Multiplicadores)
@@ -461,7 +486,7 @@ int dificultadNormal(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movim
   sleep(2);
 
   danio = calculoDano(Pokedex, Movimientos, Multiplicadores, &entrenadores[1].equipo[0], &entrenadores[0].equipo[0], *ataq);
-
+  
   return danio;
 }
 
@@ -496,15 +521,11 @@ int dificultadDificil(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movi
 
     strcpy(tipoAtaq,ataq->tipo);
     
-    if (entrenadores[0].equipo[0].tipo2[0] == '0')
-    {
-      mult2 = numeroUno;
-    }
+    if (entrenadores[0].equipo[0].tipo2[0] == '0') mult2 = numeroUno;
     else if (entrenadores[0].equipo[0].tipo2[0] != '0')
     {
       concatAttack = strcat(tipoAtaq, entrenadores[0].equipo[0].tipo2);
       Pair *aux2 = searchMap(Multiplicadores, concatAttack);
-      if(aux2 == NULL) printf("a\n");
       mult2 = aux2 -> value;
     }
     
@@ -532,6 +553,8 @@ int dificultadDificil(Entrenador entrenadores[], HashMap *Pokedex, HashMap *Movi
   
   danio = calculoDano(Pokedex, Movimientos, Multiplicadores, &entrenadores[posicion].equipo[0], &entrenadores[0].equipo[0], *ataq);
   
+  contadorBajando2(entrenadores, entrenadores[0].equipo[0].saludActual, danio, 0);
+
   return danio;
 }
 
@@ -542,8 +565,9 @@ void eliminarObjPelea(Entrenador entrenador[],int item)
   
   for (int i = item; i < entrenador[0].cantidadObj - 1; i++) 
   {
-     entrenador[0].mochila[i] = entrenador[0].mochila[i + 1];
+    entrenador[0].mochila[i] = entrenador[0].mochila[i + 1];
   }
+
   free(aux);
   entrenador[0].cantidadObj--;
   return;
@@ -564,7 +588,6 @@ void efectos(int posicion, Entrenador entrenador[],int item)
     if(entrenador[0].mochila[item].cantidad == 0) eliminarObjPelea(entrenador,item);
   }
 
-  
   if(entrenador[0].mochila[item].pp > 0)
   {  
     if (entrenador[0].mochila[item].todos == true)
@@ -652,49 +675,6 @@ void usarObjeto(Entrenador entrenadores[])
   efectos(posicion, entrenadores, item);
 }
 
-void mostrarCreditos()
-{
-  char *creditos[] =
-  {
-        "\033[0;36m-------------------------------------------------------\n",
-        "\033[0;35m                       CREDITOS\n",
-        "\033[0;36m-------------------------------------------------------\n\n",
-        "\033[0;34m\n",
-        "\033[1;37m                       Proyecto:\n\n",
-        "\033[0;34m                      \"PokeDuel\"\n",
-        "\033[1;37m\n",
-        "\033[0;34m                      Creado por:\n\n",
-        "\033[1;37m                     Team Gigabyte\n\n",
-        "\n",
-        "                  Miembros del equipo:\n\n",
-        "      Jose Lara Arce   ->  Jugando Replit hace 13hrs...\n\n",
-        "      Claudio Toledo   ->  \"BOOM\" \n\n",
-        "       Fabian Solis    ->  \"Ya, esta listo... (core dumped)\"\n\n"
-        "      Matias Villegas  ->  \"Pero ChatGPT me dijo que...\"\n\n",
-        "\n",
-        "\033[1;37m               Agradecimientos especiales:\n\n",
-        "                        ChatGPT 4\n\n",
-        "                         YOU.com\n\n",
-        "\033[0;36m     Este juego no hubiera sido posible sin su ayuda.\n\n",
-        "\n",
-        "\033[0;36m-------------------------------------------------------\n",
-        "\033[0;35m  Team Gigabyte © 2023. Todos los derechos reservados.\n",
-        "\033[0;36m-------------------------------------------------------\n\n",
-    };
-
-    
-    int num_lineas = sizeof(creditos) / sizeof(creditos[0]);
-  
-    for (int i = 0; i < num_lineas; i++) 
-    {
-      printf("%s", creditos[i]);
-      sleep(1);
-      fflush(stdout);
-    }
-  
-    printf("\033[0m");
-}
-
 void salonDeLaFama(Entrenador entrenadores[])
 {
   system("clear");
@@ -729,8 +709,51 @@ void salonDeLaFama(Entrenador entrenadores[])
 
   escribirLentamente("MUCHAS GRACIAS POR JUGAR NUESTRO VIDEOJUEGO!!!",2);
   sleep(5);
-  printf("\033[2J\033[H");
-  
+
+  limpiarConsola();
+
   mostrarCreditos();
 }
 
+void mostrarCreditos()
+{
+  char *creditos[] =
+  {
+        "\033[0;36m-------------------------------------------------------\n",
+        "\033[0;35m                       CREDITOS\n",
+        "\033[0;36m-------------------------------------------------------\n\n",
+        "\033[0;34m\n",
+        "\033[1;37m                       Proyecto:\n\n",
+        "\033[0;34m                      \"PokeDuel\"\n",
+        "\033[1;37m\n",
+        "\033[0;34m                      Creado por:\n\n",
+        "\033[1;37m                     Team Gigabyte\n\n",
+        "\n",
+        "                  Miembros del equipo:\n\n",
+        "      Jose Lara Arce   ->  \"Jugando Replit hace 13hrs...\"\n\n",
+        "      Claudio Toledo   ->  \"BOOM\" \n\n",
+        "       Fabian Solis    ->  \"Ya, esta listo... (core dumped)\"\n\n"
+        "      Matias Villegas  ->  \"Pero ChatGPT me dijo que...\"\n\n",
+        "\n",
+        "\033[1;37m               Agradecimientos especiales:\n\n",
+        "                        ChatGPT 4\n\n",
+        "                         YOU.com\n\n",
+        "\033[0;36m     Este juego no hubiera sido posible sin su ayuda.\n\n",
+        "\n",
+        "\033[0;36m-------------------------------------------------------\n",
+        "\033[0;35m  Team Gigabyte © 2023. Todos los derechos reservados.\n",
+        "\033[0;36m-------------------------------------------------------\n\n",
+    };
+
+    
+    int num_lineas = sizeof(creditos) / sizeof(creditos[0]);
+  
+    for (int i = 0; i < num_lineas; i++) 
+    {
+      printf("%s", creditos[i]);
+      sleep(1);
+      fflush(stdout);
+    }
+  
+    printf("\033[0m");
+}
